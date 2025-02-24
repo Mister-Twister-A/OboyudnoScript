@@ -24,6 +24,8 @@ class Lexer():
 
     def __read_whitespace(self):
         while self.cur_char in [' ', '\t', '\r', '\n']:
+            if self.cur_char == '\n':
+                self.line_no +=1
             self.__read_char()
 
     def __new_token(self, type_: TokenType, literal: Any):
@@ -81,7 +83,6 @@ class Lexer():
                 token = self.__new_token(TokenType.RPAREN, self.cur_char)
             case ';':
                 token = self.__new_token(TokenType.SEPARATOR, self.cur_char)
-            
             case None:
                 token = self.__new_token(TokenType.EOF, "")
             case _:
