@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Any
-
+#lol yay
 class TokenType(Enum):
     #you are my specia
     EOF = "EOF"
