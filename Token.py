@@ -19,6 +19,7 @@ class TokenType(Enum):
     PERCENT = "PERCENT"
 
     #symbols
+    SEPARATOR = ";"
     LPAREN = "LPAREN"
     RPAREN = "RPAREN"
 
