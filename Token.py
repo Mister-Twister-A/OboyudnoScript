@@ -32,7 +32,7 @@ class Token():
         self.place = place
     
     def __str__(self):
-        return f"Token {self.type} : {self.literal}; Row {self.row}, Place {self.place}"
+        return f"Token {self.type} : {self.literal} ; Row {self.row}, Place {self.place}"
     
     def __repr__(self):
         return str(self)

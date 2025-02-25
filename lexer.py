@@ -44,7 +44,7 @@ class Lexer():
                 num_dots+=1
 
             if num_dots > 1:
-                print(f"BAD NUMBER AT LINE {self.line_no} PLACE {self.position}")
+                print(f"That shit is NOT a number at line {self.line_no} place {self.position}")
                 return self.__new_token(TokenType.UNKNOWN, self.source[start_pos:self.position])
             
             number+=self.cur_char
