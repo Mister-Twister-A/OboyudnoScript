@@ -84,6 +84,29 @@ class Compiler():
                     value = self.builder.mul(left_value, right_value)
                 case "/":
                     value = self.builder.sdiv(left_value, right_value)
+                case "%":
+                    value = self.builder.srem(left_value, right_value)
+                case "^":
+                    # TODO
+                    pass
+                
+        elif isinstance(left_type, ir.FloatType) and isinstance(right_type, ir.FloatType):
+            type_ = self.type_map["float"]
+            match op:
+                case "+":
+                    value = self.builder.fadd(left_value, right_value)
+                case "-":
+                    value = self.builder.fsub(left_value, right_value)
+                case "*":
+                    value = self.builder.fmul(left_value, right_value)
+                case "/":
+                    value = self.builder.fdiv(left_value, right_value)
+                case "%":
+                    value = self.builder.frem(left_value, right_value)
+                case "^":
+                    # TODO
+                    pass
+
         return value, type_
 
     
