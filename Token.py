@@ -25,8 +25,8 @@ class TokenType(Enum):
 
 
 class Token():
-    def __init__(self, toke_type: TokenType, literal: Any, n_row:int, place:int):
-        self.type = toke_type
+    def __init__(self, token_type: TokenType, literal: Any, n_row:int, place:int):
+        self.type = token_type
         self.literal = literal # the value 
         self.row = n_row
         self.place = place

@@ -1,0 +1,46 @@
+{
+    "type": "PROGRAM",
+    "statements": [
+        {
+            "EXPRESSIONSTATEMENT": {
+                "type": "EXPRESSIONSTATEMENT",
+                "json": {
+                    "type": "INFIXEXPRESSION",
+                    "left_node": {
+                        "type": "INFIXEXPRESSION",
+                        "left_node": {
+                            "type": "INFIXEXPRESSION",
+                            "left_node": {
+                                "type": "INTLITERAL",
+                                "value": 5
+                            },
+                            "operator": "+",
+                            "r_node": {
+                                "type": "INTLITERAL",
+                                "value": 3
+                            }
+                        },
+                        "operator": "*",
+                        "r_node": {
+                            "type": "INTLITERAL",
+                            "value": 10
+                        }
+                    },
+                    "operator": "-",
+                    "r_node": {
+                        "type": "INFIXEXPRESSION",
+                        "left_node": {
+                            "type": "INTLITERAL",
+                            "value": 7
+                        },
+                        "operator": "*",
+                        "r_node": {
+                            "type": "INTLITERAL",
+                            "value": 5
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

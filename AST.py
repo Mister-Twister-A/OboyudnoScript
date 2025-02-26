@@ -20,7 +20,7 @@ class Node(ABC):
         pass
 
     @abstractmethod
-    def json_(self):
+    def json(self):
         pass
 
 
@@ -32,16 +32,19 @@ class Expression(Node):
 
 class Program(Node):
     def __init__(self):
-        self.statements = []
+        self.statements: list[Statement] = []
 
     def type_(self):
         return NodeType.PROGRAM
     
-    def json_(self):
+    def json(self):
         return {
             "type": self.type_().value,
-            "statements": [{stm.type_().value: stm.json_()} for stm in self.statements]
+            "statements": [{stm.type_().value: stm.json()} for stm in self.statements]
         }
+
+
+# statements
 
 class ExpressionStatement(Statement):
     def __init__(self, expr: Expression = None):
@@ -50,9 +53,57 @@ class ExpressionStatement(Statement):
     def type_(self):
         return NodeType.EXPRESSION_STATEMENT
     
-    def json_(self):
+    def json(self):
         return {
             "type" : self.type_().value,
-            "json" : self.expr.json_()
+            "json" : self.expr.json()
         }
 
+# expressions
+class InfixExpression(Expression):
+    def __init__(self, l_node: Expression, op: str, r_node: Expression = None):
+        self.l_node: Expression = l_node
+        self.op: str = op
+        self.r_node: Expression = r_node
+
+    def type_(self):
+        return NodeType.INFIX_EXPRESSION
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "left_node": self.l_node.json(),
+            "operator": self.op,
+            "r_node": self.r_node.json()
+
+        }
+
+        
+# litarals
+class IntLiteral(Expression):
+    def __init__(self, value: int = None):
+        self.int: int = value
+
+    def type_(self):
+        return NodeType.INT_LITERAL
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "value": self.int
+        }
+
+
+class FloatLiteral(Expression):
+    def __init__(self, value: float = None):
+        self.float: float = value
+
+    def type_(self):
+        return NodeType.FLOAT_LITERAL
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "value": self.float
+        }
+        
