@@ -2,28 +2,31 @@
     "type": "PROGRAM",
     "statements": [
         {
-            "EXPRESSIONSTATEMENT": {
-                "type": "EXPRESSIONSTATEMENT",
-                "json": {
-                    "type": "INFIXEXPRESSION",
-                    "left_node": {
-                        "type": "INFIXEXPRESSION",
-                        "left_node": {
-                            "type": "INTLITERAL",
-                            "value": 3
-                        },
-                        "operator": "+",
-                        "r_node": {
-                            "type": "INTLITERAL",
-                            "value": 3
-                        }
-                    },
-                    "operator": "+",
-                    "r_node": {
-                        "type": "INTLITERAL",
-                        "value": 3
-                    }
-                }
+            "VARSTATEMENT": {
+                "type": "VARSTATEMENT",
+                "name": {
+                    "type": "INDENTIFIERLITERAL",
+                    "value": "a"
+                },
+                "value": {
+                    "type": "INTLITERAL",
+                    "value": 52
+                },
+                "value_type": "int"
+            }
+        },
+        {
+            "VARSTATEMENT": {
+                "type": "VARSTATEMENT",
+                "name": {
+                    "type": "INDENTIFIERLITERAL",
+                    "value": "b"
+                },
+                "value": {
+                    "type": "FLOATLITERAL",
+                    "value": 42.6
+                },
+                "value_type": "float69"
             }
         }
     ]

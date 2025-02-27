@@ -4,9 +4,9 @@ from enum import Enum, auto
 from typing import Callable
 
 from AST import Statement, Expression,Program
-from AST import ExpressionStatement
+from AST import ExpressionStatement, VarStatement
 from AST import InfixExpression
-from AST import IntLiteral, FloatLiteral
+from AST import IntLiteral, FloatLiteral, IdentifierLiteral
 
 
 
@@ -66,6 +66,9 @@ class Parser():
     def __next_token_is(self, type_: TokenType):
         return self.next_token.type == type_
     
+    def __cur_token_is(self, type_: TokenType):
+        return self.cur_token.type == type_
+    
     def __cur_precedence(self):
         prec: Precedence | None =  PRECEDENCES.get(self.cur_token.type)
         if prec == None:
@@ -106,7 +109,11 @@ class Parser():
         return program
     
     def __parse_statement(self):
-        return self.__parse_statement_expression()
+        match self.cur_token.type:
+            case TokenType.VAR:
+                return self.__parse_var_statement()
+            case _:
+                return self.__parse_statement_expression()
     
     def __parse_statement_expression(self):
         expr = self.__parse_expression(Precedence.P_LOWEST)
@@ -115,6 +122,34 @@ class Parser():
             self.__next_token()
 
         stm: ExpressionStatement = ExpressionStatement(expr=expr)
+        return stm
+    
+    def __parse_var_statement(self):
+        # var a: int = 10;
+        stm: VarStatement = VarStatement()
+
+        if not self.__expect_next(TokenType.IDENTIFIER):
+            return None
+        
+        stm.name = IdentifierLiteral(self.cur_token.literal)
+        
+
+        if not self.__expect_next(TokenType.COLON):
+            return None
+        if not self.__expect_next(TokenType.TYPE):
+            return None
+        
+        stm.value_type = self.cur_token.literal
+
+        if not self.__expect_next(TokenType.EQ):
+            return None
+        self.__next_token()
+
+        stm.value = self.__parse_expression(Precedence.P_LOWEST)
+        
+        while not self.__cur_token_is(TokenType.SEPARATOR) and not self.__cur_token_is(TokenType.EOF):
+            self.__next_token()
+        print(stm.name)
         return stm
     
     def __parse_expression(self, precedence: Precedence):

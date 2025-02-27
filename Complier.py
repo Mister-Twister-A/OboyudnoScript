@@ -1,8 +1,11 @@
 from llvmlite import ir
 
 from AST import Node, NodeType, Statement, Expression, Program
-from AST import ExpressionStatement, InfixExpression
-from AST import IntLiteral, FloatLiteral
+from AST import ExpressionStatement, VarStatement
+from AST import InfixExpression
+from AST import IntLiteral, FloatLiteral, IdentifierLiteral
+
+from Enviroment import Enviroment
 
 class Compiler():
     def __init__(self):
@@ -13,6 +16,7 @@ class Compiler():
 
         self.module: ir.Module = ir.Module("main")
         self.builder: ir.IRBuilder = ir.IRBuilder()
+        self.env: Enviroment = Enviroment()
 
     def compile(self, node: Node):
         match node.type_():
@@ -21,6 +25,8 @@ class Compiler():
             # statements
             case NodeType.EXPRESSION_STATEMENT:
                 self.__visit_expression_statement(node)
+            case NodeType.VAR_STATEMENT:
+                self.__visit_var_statement(node)
             
             #expressions
             case NodeType.INFIX_EXPRESSION:
@@ -35,6 +41,9 @@ class Compiler():
             case NodeType.FLOAT_LITERAL:
                 value, type_ = node.float, self.type_map["float" if value_type is None else value_type]
                 return ir.Constant(type_, value), type_
+            case NodeType.INDENTIFIER_LITERAL:
+                ptr, type_ = self.env.lookup(node.value)
+                return self.builder.load(ptr), type_
             
             # expressions
             case NodeType.INFIX_EXPRESSION:
@@ -108,5 +117,20 @@ class Compiler():
                     pass
 
         return value, type_
+    
+    def __visit_var_statement(self, node:VarStatement):
+        name: str = node.name.value
+        value: Expression = node.value
+        value_type: str = node.value_type
+
+        value, type_ = self.__resolve_value(node=value)
+
+        if self.env.lookup(name) is None:
+            ptr = self.builder.alloca(type_)
+            self.builder.store(value,ptr)
+            self.env.define(name, value, type_)
+        else:
+            ptr, _ = self.env.lookup(name)
+            self.builder.store(value, ptr)
 
     

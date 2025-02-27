@@ -1,4 +1,4 @@
-from Token import Token, TokenType
+from Token import Token, TokenType, lookup_ident
 from typing import Any
 
 
@@ -33,6 +33,8 @@ class Lexer():
     
     def __is_digit(self, ch: str):
         return '0' <= ch and ch <= '9'
+    def __is_letter(self, ch):
+        return 'a' <= ch and ch <= 'z' or 'A' <= ch and ch <= 'Z' or ch == '_'
     
     def __read_number(self):
         start_pos : int = self.position
@@ -57,6 +59,12 @@ class Lexer():
             return self.__new_token(TokenType.INT, int(number))
         else: 
             return self.__new_token(TokenType.FLOAT, float(number))
+        
+    def __read_indentifier(self):
+        position = self.position
+        while self.cur_char is not None and (self.__is_letter(self.cur_char) or self.cur_char.isalnum()):
+            self.__read_char()
+        return self.source[position:self.position]
 
 
     def next_token(self):
@@ -81,12 +89,23 @@ class Lexer():
                 token = self.__new_token(TokenType.LPAREN, self.cur_char)
             case ')':
                 token = self.__new_token(TokenType.RPAREN, self.cur_char)
+            case '=':
+                token = self.__new_token(TokenType.EQ, self.cur_char)
             case ';':
-                token = self.__new_token(TokenType.SEPARATOR, self.cur_char)
+                token = self.__new_token(TokenType.SEPARATOR, self.cur_char) 
+            case ':':
+                token = self.__new_token(TokenType.COLON, self.cur_char) 
+            case '🤙':
+                token = self.__new_token(TokenType.COLON, self.cur_char) 
             case None:
                 token = self.__new_token(TokenType.EOF, "")
             case _:
-                if self.__is_digit(self.cur_char):
+                if self.__is_letter(self.cur_char):
+                    literal: str = self.__read_indentifier()
+                    type_ = lookup_ident(literal)
+                    token = self.__new_token(type_,literal)
+                    return token
+                elif self.__is_digit(self.cur_char):
                     token = self.__read_number()
                     return token
                 else:

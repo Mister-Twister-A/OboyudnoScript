@@ -6,6 +6,7 @@ class NodeType(Enum):
 
     # statements
     EXPRESSION_STATEMENT = "EXPRESSIONSTATEMENT"
+    VAR_STATEMENT = "VARSTATEMENT"
 
     # expressions
     INFIX_EXPRESSION = "INFIXEXPRESSION"
@@ -13,6 +14,7 @@ class NodeType(Enum):
     #literal
     INT_LITERAL = "INTLITERAL"
     FLOAT_LITERAL = "FLOATLITERAL"
+    INDENTIFIER_LITERAL = "INDENTIFIERLITERAL"
 
 class Node(ABC):
     @abstractmethod
@@ -58,6 +60,24 @@ class ExpressionStatement(Statement):
             "type" : self.type_().value,
             "json" : self.expr.json()
         }
+    
+class VarStatement(Statement):
+    def __init__(self, name: Expression = None, value: Expression = None, value_type:str = None):
+        self.name = name
+        self.value = value
+        self.value_type = value_type
+
+    def type_(self):
+        return NodeType.VAR_STATEMENT
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "name": self.name.json(),
+            "value": self.value.json(),
+            "value_type": self.value_type
+        }
+        
 
 # expressions
 class InfixExpression(Expression):
@@ -105,5 +125,19 @@ class FloatLiteral(Expression):
         return {
             "type": self.type_().value,
             "value": self.float
+        }
+    
+
+class IdentifierLiteral(Expression):
+    def __init__(self, value: str = None):
+        self.value: str = value
+
+    def type_(self):
+        return NodeType.INDENTIFIER_LITERAL
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "value": self.iden
         }
         
