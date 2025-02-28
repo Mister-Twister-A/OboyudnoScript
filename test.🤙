@@ -1,6 +1,6 @@
 def main()->int {
     var a: int= 10;
-
+    a = a + 10;
     return a + 520/a; 
 }
 

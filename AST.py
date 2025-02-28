@@ -10,6 +10,7 @@ class NodeType(Enum):
     BLOCK_STATEMENT = "BLOCK_STATEMENT"
     RETURN_STATEMENT = "RETURN_STATEMENT"
     DEF_STATEMENT = "DEF_STATEMENT"
+    ASSIGNMENT_STATEMENT = "ASSIGNMENT_STATEMENT"
 
     # expressions
     INFIX_EXPRESSION = "INFIXEXPRESSION"
@@ -130,6 +131,24 @@ class DefStatement(Statement):
             "ret_type": self.ret_type,
             "block": self.block.json()
         }
+    
+
+class AssignmentStatement(Statement):
+    def __init__(self, iden: Expression = None, new_value: Expression = None):
+        self.iden = iden
+        self.new_value = new_value
+
+    def type_(self):
+        return NodeType.ASSIGNMENT_STATEMENT
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "identifier": self.iden.json(),
+            "new_vlaue": self.new_value.json()
+
+        }
+        
         
 
 # expressions

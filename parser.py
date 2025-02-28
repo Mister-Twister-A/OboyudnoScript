@@ -4,7 +4,7 @@ from enum import Enum, auto
 from typing import Callable
 
 from AST import Statement, Expression,Program
-from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement
+from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement
 from AST import InfixExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral
 
@@ -110,6 +110,9 @@ class Parser():
         return program
     
     def __parse_statement(self):
+        if self.__cur_token_is(TokenType.IDENTIFIER) and self.__next_token_is(TokenType.EQ):
+            return self.__parse_assignment_statement()
+
         match self.cur_token.type:
             case TokenType.VAR:
                 return self.__parse_var_statement()
@@ -149,12 +152,25 @@ class Parser():
         if not self.__expect_next(TokenType.EQ):
             return None
         self.__next_token()
-
         stm.value = self.__parse_expression(Precedence.P_LOWEST)
         
         while not self.__cur_token_is(TokenType.SEPARATOR) and not self.__cur_token_is(TokenType.EOF):
             self.__next_token()
         return stm
+    
+    def __parse_assignment_statement(self):
+        stm: AssignmentStatement = AssignmentStatement()
+        # x = 5 + 5
+        stm.iden = IdentifierLiteral(self.cur_token.literal)
+        self.__next_token()
+        self.__next_token()
+        stm.new_value = self.__parse_expression(Precedence.P_LOWEST)
+
+        self.__next_token()
+
+        return stm
+
+
     
     def __parse_def_statement(self):
         def_stm: DefStatement = DefStatement()

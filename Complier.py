@@ -1,7 +1,7 @@
 from llvmlite import ir
 
 from AST import Node, NodeType, Statement, Expression, Program
-from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement
+from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement
 from AST import InfixExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral
 
@@ -19,6 +19,7 @@ class Compiler():
         self.module: ir.Module = ir.Module("main")
         self.builder: ir.IRBuilder = ir.IRBuilder()
         self.env: Enviroment = Enviroment()
+        self.errors: list[str] = []
 
     def compile(self, node: Node):
         match node.type_():
@@ -35,6 +36,8 @@ class Compiler():
                 self.__visit_block_statement(node)
             case NodeType.RETURN_STATEMENT:
                 self.__visit_return_statement(node)
+            case NodeType.ASSIGNMENT_STATEMENT:
+                self.__visit_ass_statement(node)
 
             
             #expressions
@@ -151,6 +154,19 @@ class Compiler():
         value, type_ = self.__resolve_value(value)
 
         self.builder.ret(value)
+    
+    def __visit_ass_statement(self, node: AssignmentStatement): # asssingment bro
+        name:str = node.iden.value
+        new_value: Expression = node.new_value
+
+        value, type_ = self.__resolve_value(new_value)
+        if self.env.lookup(name) is None:
+            self.errors.append(f"bro you forgot to declare {name} before re-ASSinging it")
+        else: 
+            ptr, _ = self.env.lookup(name)
+            self.builder.store(value, ptr)
+
+
 
     def __visit_def_statement(self, node:DefStatement):
         name:str = node.name.value
