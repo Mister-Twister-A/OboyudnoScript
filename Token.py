@@ -21,15 +21,21 @@ class TokenType(Enum):
 
     #assigmenty symbols
     EQ = "EQ"
+    
 
     #symbols
+    ARROW = "ARROW"
     COLON = ":"
     SEPARATOR = ";"
     LPAREN = "LPAREN"
     RPAREN = "RPAREN"
+    LBRACE = "LBRACE"
+    RBRACE = "RBRACE"
 
     #key words
     VAR = "VAR"
+    DEF = "DEF"
+    RETURN = "RETURN"
 
     # type
     TYPE = "TYPE"
@@ -49,13 +55,18 @@ class Token():
         return str(self)
     
 KEYWORDS: dict[str, TokenType] = {
-    "var": TokenType.VAR
+    "var": TokenType.VAR,
+    "def": TokenType.DEF,
+    "return": TokenType.RETURN
 }
 
 OBOYUDNO_KEYWORDS: dict[str, TokenType] = {
     "oboyudno": TokenType.VAR,
     "🤙": TokenType.COLON,
-    "real": TokenType.SEPARATOR
+    "real": TokenType.SEPARATOR,
+    "basil": TokenType.DEF,
+    "fuck_you": TokenType.RETURN,
+    "B--D": TokenType.ARROW,
 }
 
 TYPE_KEYWORDS: list[str] = ["int", "float", "int52", "float69"]

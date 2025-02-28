@@ -2,31 +2,85 @@
     "type": "PROGRAM",
     "statements": [
         {
-            "VARSTATEMENT": {
-                "type": "VARSTATEMENT",
+            "DEF_STATEMENT": {
+                "type": "DEF_STATEMENT",
                 "name": {
                     "type": "INDENTIFIERLITERAL",
-                    "value": "a"
+                    "value": "main"
                 },
-                "value": {
-                    "type": "INTLITERAL",
-                    "value": 52
-                },
-                "value_type": "int"
+                "params": [],
+                "ret_type": "int",
+                "block": {
+                    "type": "BLOCK_STATEMENT",
+                    "statements": [
+                        {
+                            "type": "VARSTATEMENT",
+                            "name": {
+                                "type": "INDENTIFIERLITERAL",
+                                "value": "a"
+                            },
+                            "value": {
+                                "type": "INTLITERAL",
+                                "value": 10
+                            },
+                            "value_type": "int"
+                        },
+                        {
+                            "type": "RETURN_STATEMENT",
+                            "ret_value": {
+                                "type": "INDENTIFIERLITERAL",
+                                "value": "a"
+                            }
+                        }
+                    ]
+                }
             }
         },
         {
-            "VARSTATEMENT": {
-                "type": "VARSTATEMENT",
+            "DEF_STATEMENT": {
+                "type": "DEF_STATEMENT",
                 "name": {
                     "type": "INDENTIFIERLITERAL",
-                    "value": "b"
+                    "value": "main52"
                 },
-                "value": {
-                    "type": "FLOATLITERAL",
-                    "value": 42.6
-                },
-                "value_type": "float69"
+                "params": [],
+                "ret_type": "float",
+                "block": {
+                    "type": "BLOCK_STATEMENT",
+                    "statements": [
+                        {
+                            "type": "VARSTATEMENT",
+                            "name": {
+                                "type": "INDENTIFIERLITERAL",
+                                "value": "b"
+                            },
+                            "value": {
+                                "type": "FLOATLITERAL",
+                                "value": 42.6
+                            },
+                            "value_type": "float"
+                        },
+                        {
+                            "type": "VARSTATEMENT",
+                            "name": {
+                                "type": "INDENTIFIERLITERAL",
+                                "value": "c"
+                            },
+                            "value": {
+                                "type": "INTLITERAL",
+                                "value": 130
+                            },
+                            "value_type": "int52"
+                        },
+                        {
+                            "type": "RETURN_STATEMENT",
+                            "ret_value": {
+                                "type": "INDENTIFIERLITERAL",
+                                "value": "b"
+                            }
+                        }
+                    ]
+                }
             }
         }
     ]

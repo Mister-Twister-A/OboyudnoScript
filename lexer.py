@@ -22,6 +22,12 @@ class Lexer():
         self.position = self.read_position
         self.read_position += 1
 
+    def __next_char(self, len_):
+        if self.read_position + (len_ - 1) >= len(self.source):
+            return None
+        else: 
+            return self.source[self.read_position + (len_ - 1)]
+
     def __read_whitespace(self):
         while self.cur_char in [' ', '\t', '\r', '\n']:
             if self.cur_char == '\n':
@@ -62,6 +68,14 @@ class Lexer():
         
     def __read_indentifier(self):
         position = self.position
+        # handle arrow
+        if self.cur_char == 'B' and self.__next_char(1) == '-' and self.__next_char(2) == '-':
+            self.__read_char()
+            self.__read_char()
+            self.__read_char()
+            self.__read_char()
+            return self.source[position:self.position]
+
         while self.cur_char is not None and (self.__is_letter(self.cur_char) or self.cur_char.isalnum()):
             self.__read_char()
         return self.source[position:self.position]
@@ -76,7 +90,13 @@ class Lexer():
             case '+':
                 token = self.__new_token(TokenType.PLUS, self.cur_char)
             case '-':
-                token = self.__new_token(TokenType.MINUS, self.cur_char)
+                if self.__next_char(1) == '>':
+                    ch = self.cur_char
+                    self.__read_char()
+                    token = self.__new_token(TokenType.ARROW, ch + self.cur_char)
+                else: 
+                    token = self.__new_token(TokenType.MINUS, self.cur_char)
+                
             case '*':
                 token = self.__new_token(TokenType.MULTIPLY, self.cur_char)
             case '/':
@@ -89,6 +109,10 @@ class Lexer():
                 token = self.__new_token(TokenType.LPAREN, self.cur_char)
             case ')':
                 token = self.__new_token(TokenType.RPAREN, self.cur_char)
+            case '{':
+                token = self.__new_token(TokenType.LBRACE, self.cur_char)
+            case '}':
+                token = self.__new_token(TokenType.RBRACE, self.cur_char)
             case '=':
                 token = self.__new_token(TokenType.EQ, self.cur_char)
             case ';':

@@ -4,7 +4,7 @@ from enum import Enum, auto
 from typing import Callable
 
 from AST import Statement, Expression,Program
-from AST import ExpressionStatement, VarStatement
+from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement
 from AST import InfixExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral
 
@@ -40,6 +40,7 @@ class Parser():
         self.next_token: Token = None
 
         self.prefix_parse_fn: dict[TokenType, Callable] = {
+            TokenType.IDENTIFIER: self.__parse_identifier,
             TokenType.INT: self.__parse_int_literal,
             TokenType.FLOAT: self.__parse_float_literal,
             TokenType.LPAREN: self.__parse_group_expression
@@ -112,6 +113,10 @@ class Parser():
         match self.cur_token.type:
             case TokenType.VAR:
                 return self.__parse_var_statement()
+            case TokenType.DEF:
+                return self.__parse_def_statement()
+            case TokenType.RETURN:
+                return self.__parse_ret_statement()
             case _:
                 return self.__parse_statement_expression()
     
@@ -149,8 +154,66 @@ class Parser():
         
         while not self.__cur_token_is(TokenType.SEPARATOR) and not self.__cur_token_is(TokenType.EOF):
             self.__next_token()
-        print(stm.name)
         return stm
+    
+    def __parse_def_statement(self):
+        def_stm: DefStatement = DefStatement()
+        # def name() -> int { return x; }
+
+        if not self.__expect_next(TokenType.IDENTIFIER):
+            return None
+        
+        def_stm.name = IdentifierLiteral(self.cur_token.literal)
+
+        if not self.__expect_next(TokenType.LPAREN):
+            return None
+        
+        def_stm.params = [] # TODO
+        if not self.__expect_next(TokenType.RPAREN):
+            return None
+        
+        if not self.__expect_next(TokenType.ARROW):
+            return None
+        
+        if not self.__expect_next(TokenType.TYPE):
+            return None
+        
+        def_stm.ret_type = self.cur_token.literal
+
+        if not self.__expect_next(TokenType.LBRACE):
+            return None
+        
+        def_stm.block = self.__parse_block_statement()
+
+        return def_stm
+
+
+
+
+    def __parse_ret_statement(self):
+        stm: ReturnStatement = ReturnStatement()
+
+        self.__next_token()
+        stm.ret_value = self.__parse_expression(Precedence.P_LOWEST)
+
+        if not self.__expect_next(TokenType.SEPARATOR):
+            return None
+        
+        return stm
+        
+
+    def __parse_block_statement(self):
+        block: BlockStatement = BlockStatement()
+        self.__next_token()
+        while not self.__cur_token_is(TokenType.RBRACE) and not self.__cur_token_is(TokenType.EOF):
+            stm = self.__parse_statement()
+            if stm is not None:
+                block.statements.append(stm)
+
+            self.__next_token()
+
+        return block
+                
     
     def __parse_expression(self, precedence: Precedence):
         prefix_fn: Callable | None = self.prefix_parse_fn.get(self.cur_token.type) 
@@ -212,5 +275,8 @@ class Parser():
             return None
         
         return float_node
+    
+    def __parse_identifier(self):
+        return IdentifierLiteral(self.cur_token.literal)
 
 
