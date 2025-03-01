@@ -26,45 +26,60 @@
                             "value_type": "int"
                         },
                         {
-                            "type": "ASSIGNMENT_STATEMENT",
-                            "identifier": {
-                                "type": "INDENTIFIERLITERAL",
-                                "value": "a"
-                            },
-                            "new_vlaue": {
-                                "type": "INFIXEXPRESSION",
-                                "left_node": {
-                                    "type": "INDENTIFIERLITERAL",
-                                    "value": "a"
+                            "type": "EXPRESSIONSTATEMENT",
+                            "json": {
+                                "type": "IF_STATEMENT",
+                                "condition": {
+                                    "type": "INFIXEXPRESSION",
+                                    "left_node": {
+                                        "type": "INDENTIFIERLITERAL",
+                                        "value": "a"
+                                    },
+                                    "operator": "==",
+                                    "r_node": {
+                                        "type": "INTLITERAL",
+                                        "value": 10
+                                    }
                                 },
-                                "operator": "+",
-                                "r_node": {
-                                    "type": "INTLITERAL",
-                                    "value": 10
+                                "true_block": {
+                                    "type": "BLOCK_STATEMENT",
+                                    "statements": [
+                                        {
+                                            "type": "ASSIGNMENT_STATEMENT",
+                                            "identifier": {
+                                                "type": "INDENTIFIERLITERAL",
+                                                "value": "a"
+                                            },
+                                            "new_vlaue": {
+                                                "type": "INTLITERAL",
+                                                "value": 5
+                                            }
+                                        }
+                                    ]
+                                },
+                                "else_block": {
+                                    "type": "BLOCK_STATEMENT",
+                                    "statements": [
+                                        {
+                                            "type": "ASSIGNMENT_STATEMENT",
+                                            "identifier": {
+                                                "type": "INDENTIFIERLITERAL",
+                                                "value": "a"
+                                            },
+                                            "new_vlaue": {
+                                                "type": "INTLITERAL",
+                                                "value": 52
+                                            }
+                                        }
+                                    ]
                                 }
                             }
                         },
                         {
                             "type": "RETURN_STATEMENT",
                             "ret_value": {
-                                "type": "INFIXEXPRESSION",
-                                "left_node": {
-                                    "type": "INDENTIFIERLITERAL",
-                                    "value": "a"
-                                },
-                                "operator": "+",
-                                "r_node": {
-                                    "type": "INFIXEXPRESSION",
-                                    "left_node": {
-                                        "type": "INTLITERAL",
-                                        "value": 520
-                                    },
-                                    "operator": "/",
-                                    "r_node": {
-                                        "type": "INDENTIFIERLITERAL",
-                                        "value": "a"
-                                    }
-                                }
+                                "type": "INDENTIFIERLITERAL",
+                                "value": "a"
                             }
                         }
                     ]
@@ -106,6 +121,56 @@
                                 "value": 130
                             },
                             "value_type": "int52"
+                        },
+                        {
+                            "type": "EXPRESSIONSTATEMENT",
+                            "json": {
+                                "type": "IF_STATEMENT",
+                                "condition": {
+                                    "type": "INFIXEXPRESSION",
+                                    "left_node": {
+                                        "type": "INDENTIFIERLITERAL",
+                                        "value": "b"
+                                    },
+                                    "operator": "==",
+                                    "r_node": {
+                                        "type": "FLOATLITERAL",
+                                        "value": 42.52
+                                    }
+                                },
+                                "true_block": {
+                                    "type": "BLOCK_STATEMENT",
+                                    "statements": [
+                                        {
+                                            "type": "ASSIGNMENT_STATEMENT",
+                                            "identifier": {
+                                                "type": "INDENTIFIERLITERAL",
+                                                "value": "c"
+                                            },
+                                            "new_vlaue": {
+                                                "type": "INTLITERAL",
+                                                "value": 27
+                                            }
+                                        }
+                                    ]
+                                },
+                                "else_block": {
+                                    "type": "BLOCK_STATEMENT",
+                                    "statements": [
+                                        {
+                                            "type": "ASSIGNMENT_STATEMENT",
+                                            "identifier": {
+                                                "type": "INDENTIFIERLITERAL",
+                                                "value": "c"
+                                            },
+                                            "new_vlaue": {
+                                                "type": "INTLITERAL",
+                                                "value": 143
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
                         },
                         {
                             "type": "RETURN_STATEMENT",

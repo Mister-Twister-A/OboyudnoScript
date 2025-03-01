@@ -21,7 +21,14 @@ class TokenType(Enum):
 
     #assigmenty symbols
     EQ = "EQ"
-    
+
+    # bool symbols
+    LESS = "<"
+    GREATER = ">"
+    DOUBLE_EQ = "=="
+    GREATER_EQ = ">="
+    LESS_EQ = "<="
+    NOT_EQ = "!="
 
     #symbols
     ARROW = "ARROW"
@@ -36,6 +43,10 @@ class TokenType(Enum):
     VAR = "VAR"
     DEF = "DEF"
     RETURN = "RETURN"
+    IF = "IF"
+    ELSE = "ELSE"
+    TRUE = "TRUE"
+    FALSE = "FALSE"
 
     # type
     TYPE = "TYPE"
@@ -57,7 +68,12 @@ class Token():
 KEYWORDS: dict[str, TokenType] = {
     "var": TokenType.VAR,
     "def": TokenType.DEF,
-    "return": TokenType.RETURN
+    "return": TokenType.RETURN,
+    "if": TokenType.IF,
+    "else": TokenType.ELSE,
+    "true": TokenType.TRUE,
+    "false": TokenType.FALSE
+
 }
 
 OBOYUDNO_KEYWORDS: dict[str, TokenType] = {
@@ -67,6 +83,9 @@ OBOYUDNO_KEYWORDS: dict[str, TokenType] = {
     "basil": TokenType.DEF,
     "fuck_you": TokenType.RETURN,
     "B--D": TokenType.ARROW,
+    "ye": TokenType.IF,
+    "elsagate": TokenType.ELSE
+
 }
 
 TYPE_KEYWORDS: list[str] = ["int", "float", "int52", "float69"]

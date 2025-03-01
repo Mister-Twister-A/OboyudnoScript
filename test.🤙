@@ -1,12 +1,22 @@
 def main()->int {
-    var a: int= 10;
-    a = a + 10;
-    return a + 520/a; 
+    var a: int= 11;
+    if a == 10 {
+        a = 5;
+    } else {
+        a = 52;
+    }
+    return a; 
 }
 
 basil main52() B--D float69 {
     oboyudno b🤙 float69 = 42.6 real
-    oboyudno c: int52 = 130;
+    oboyudno c🤙 int52 = 130;
+    ye b == 42.52 {
+        c = 27 real
+    } 
+    elsagate {
+        c = 143 real
+    }
     fuck_you b real
 }
 

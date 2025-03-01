@@ -11,6 +11,7 @@ class NodeType(Enum):
     RETURN_STATEMENT = "RETURN_STATEMENT"
     DEF_STATEMENT = "DEF_STATEMENT"
     ASSIGNMENT_STATEMENT = "ASSIGNMENT_STATEMENT"
+    IF_STATEMENT = "IF_STATEMENT"
 
     # expressions
     INFIX_EXPRESSION = "INFIXEXPRESSION"
@@ -19,6 +20,7 @@ class NodeType(Enum):
     INT_LITERAL = "INTLITERAL"
     FLOAT_LITERAL = "FLOATLITERAL"
     INDENTIFIER_LITERAL = "INDENTIFIERLITERAL"
+    BOOL_LITERAL = "BOOL_LITERAL"
 
 class Node(ABC):
     @abstractmethod
@@ -148,7 +150,24 @@ class AssignmentStatement(Statement):
             "new_vlaue": self.new_value.json()
 
         }
-        
+
+
+class IfStatement(Statement):
+    def __init__(self, condition: Expression = None, true_block: BlockStatement = None, else_block: BlockStatement = None):
+        self.condition = condition
+        self.true_block = true_block
+        self.else_block = else_block
+
+    def type_(self):
+        return NodeType.IF_STATEMENT
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "condition": self.condition.json(),
+            "true_block": self.true_block.json(),
+            "else_block": self.else_block.json()
+        }
         
 
 # expressions
@@ -213,3 +232,16 @@ class IdentifierLiteral(Expression):
             "value": self.value
         }
         
+
+class BoolLiteral(Expression):
+    def __init__(self, value: bool = None):
+        self.value: bool = value
+
+    def type_(self):
+        return NodeType.BOOL_LITERAL
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "value": self.value
+        }

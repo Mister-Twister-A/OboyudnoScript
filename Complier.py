@@ -1,9 +1,9 @@
 from llvmlite import ir
 
 from AST import Node, NodeType, Statement, Expression, Program
-from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement
+from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement
 from AST import InfixExpression
-from AST import IntLiteral, FloatLiteral, IdentifierLiteral
+from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
 
 from Enviroment import Enviroment
 
@@ -12,14 +12,35 @@ class Compiler():
         self.type_map: dict[str, ir.Type] = {
             "int": ir.IntType(32),
             "float": ir.FloatType(),
-            "int52": ir.IntType(64),
-            "float69": ir.FloatType()
+            "int52": ir.IntType(32), # TODO make int 64
+            "float69": ir.FloatType(),
+            "bool": ir.IntType(1)
         }
 
         self.module: ir.Module = ir.Module("main")
         self.builder: ir.IRBuilder = ir.IRBuilder()
         self.env: Enviroment = Enviroment()
         self.errors: list[str] = []
+        self.__initialize_builtins()
+    
+    def __initialize_builtins(self):
+        def __initialize_bools():
+            bool_type: ir.Type = self.type_map["bool"]
+
+            true_var = ir.GlobalVariable(self.module, bool_type, "true")
+            true_var.initializer = ir.Constant(bool_type, 1)
+            true_var.global_constant = True
+
+            false_var = ir.GlobalVariable(self.module, bool_type, "false")
+            false_var.initializer = ir.Constant(bool_type, 0)
+            false_var.global_constant = True
+
+            return true_var, false_var
+        
+        true_var, false_var = __initialize_bools()
+        self.env.define("true", true_var, true_var.type)
+        self.env.define("false", false_var, false_var.type)
+
 
     def compile(self, node: Node):
         match node.type_():
@@ -38,6 +59,8 @@ class Compiler():
                 self.__visit_return_statement(node)
             case NodeType.ASSIGNMENT_STATEMENT:
                 self.__visit_ass_statement(node)
+            case NodeType.IF_STATEMENT:
+                self.__visit_if_statement(node)
 
             
             #expressions
@@ -56,6 +79,8 @@ class Compiler():
             case NodeType.INDENTIFIER_LITERAL:
                 ptr, type_ = self.env.lookup(node.value)
                 return self.builder.load(ptr), type_
+            case NodeType.BOOL_LITERAL:
+                return ir.Constant(ir.IntType(1), 1 if node.value else 0), ir.IntType(1)
             
             # expressions
             case NodeType.INFIX_EXPRESSION:
@@ -110,6 +135,21 @@ class Compiler():
                 case "^":
                     # TODO
                     pass
+                case "<":
+                    value = self.builder.icmp_signed("<", left_value, right_value)
+                    type_ = ir.IntType(1)
+                case ">":
+                    value = self.builder.icmp_signed(">", left_value, right_value)
+                    type_ = ir.IntType(1)
+                case "<=":
+                    value = self.builder.icmp_signed("<=", left_value, right_value)
+                    type_ = ir.IntType(1)
+                case ">=":
+                    value = self.builder.icmp_signed(">=", left_value, right_value)
+                    type_ = ir.IntType(1)
+                case "==":
+                    value = self.builder.icmp_signed("==", left_value, right_value)
+                    type_ = ir.IntType(1)
                 
         elif isinstance(left_type, ir.FloatType) and isinstance(right_type, ir.FloatType):
             type_ = self.type_map["float"]
@@ -127,6 +167,21 @@ class Compiler():
                 case "^":
                     # TODO
                     pass
+                case "<":
+                    value = self.builder.fcmp_ordered("<", left_value, right_value)
+                    type_ = ir.IntType(1)
+                case ">":
+                    value = self.builder.fcmp_ordered(">", left_value, right_value)
+                    type_ = ir.IntType(1)
+                case "<=":
+                    value = self.builder.fcmp_ordered("<=", left_value, right_value)
+                    type_ = ir.IntType(1)
+                case ">=":
+                    value = self.builder.fcmp_ordered(">=", left_value, right_value)
+                    type_ = ir.IntType(1)
+                case "==":
+                    value = self.builder.fcmp_ordered("==", left_value, right_value)
+                    type_ = ir.IntType(1)
 
         return value, type_
     
@@ -165,6 +220,25 @@ class Compiler():
         else: 
             ptr, _ = self.env.lookup(name)
             self.builder.store(value, ptr)
+
+    def __visit_if_statement(self, node: IfStatement):
+        condition = node.condition
+        true_block = node.true_block
+        else_block = node.else_block
+
+        test,_ = self.__resolve_value(condition)
+
+        if else_block is None:
+            with self.builder.if_then(test):
+                self.compile(true_block)
+        else:
+            with self.builder.if_else(test) as (if_then, if_else):
+                with if_then:
+                    self.compile(true_block)
+                with if_else:
+                    self.compile(else_block)
+                
+
 
 
 

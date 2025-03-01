@@ -4,9 +4,9 @@ from enum import Enum, auto
 from typing import Callable
 
 from AST import Statement, Expression,Program
-from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement
+from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement
 from AST import InfixExpression
-from AST import IntLiteral, FloatLiteral, IdentifierLiteral
+from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
 
 
 
@@ -28,7 +28,14 @@ PRECEDENCES : dict[TokenType, Precedence] = {
     TokenType.MULTIPLY: Precedence.P_PRODUCT,
     TokenType.DIVIDE: Precedence.P_PRODUCT,
     TokenType.PERCENT: Precedence.P_PRODUCT,
-    TokenType.POW: Precedence.P_EXPONENT
+    TokenType.POW: Precedence.P_EXPONENT,
+    TokenType.DOUBLE_EQ: Precedence.P_EQUAL,
+    TokenType.NOT_EQ: Precedence.P_EQUAL,
+    TokenType.LESS: Precedence.P_LESSGREATER,
+    TokenType.GREATER: Precedence.P_LESSGREATER,
+    TokenType.LESS_EQ: Precedence.P_LESSGREATER,
+    TokenType.GREATER_EQ: Precedence.P_LESSGREATER,
+
 }
 
 class Parser():
@@ -43,7 +50,10 @@ class Parser():
             TokenType.IDENTIFIER: self.__parse_identifier,
             TokenType.INT: self.__parse_int_literal,
             TokenType.FLOAT: self.__parse_float_literal,
-            TokenType.LPAREN: self.__parse_group_expression
+            TokenType.LPAREN: self.__parse_group_expression,
+            TokenType.IF: self.__parse_if_statement,
+            TokenType.TRUE: self.__parse_bool,
+            TokenType.FALSE: self.__parse_bool,
         } 
         self.infix_parse_fn: dict[TokenType, Callable] = {
             TokenType.PLUS: self.__parse_infix_expression,
@@ -52,6 +62,12 @@ class Parser():
             TokenType.DIVIDE: self.__parse_infix_expression,
             TokenType.POW: self.__parse_infix_expression,
             TokenType.PERCENT: self.__parse_infix_expression,
+            TokenType.DOUBLE_EQ: self.__parse_infix_expression,
+            TokenType.NOT_EQ: self.__parse_infix_expression,
+            TokenType.LESS: self.__parse_infix_expression,
+            TokenType.GREATER: self.__parse_infix_expression,
+            TokenType.LESS_EQ: self.__parse_infix_expression,
+            TokenType.GREATER_EQ: self.__parse_infix_expression,
 
         } 
 
@@ -203,9 +219,6 @@ class Parser():
 
         return def_stm
 
-
-
-
     def __parse_ret_statement(self):
         stm: ReturnStatement = ReturnStatement()
 
@@ -217,7 +230,6 @@ class Parser():
         
         return stm
         
-
     def __parse_block_statement(self):
         block: BlockStatement = BlockStatement()
         self.__next_token()
@@ -229,8 +241,26 @@ class Parser():
             self.__next_token()
 
         return block
-                
     
+    def __parse_if_statement(self):
+        condition: Expression = None
+        true_block: BlockStatement = None
+        else_block: BlockStatement = None
+
+        self.__next_token()
+        condition = self.__parse_expression(Precedence.P_LOWEST)
+        if not self.__expect_next(TokenType.LBRACE):
+            return None
+        true_block = self.__parse_block_statement()
+        if self.__next_token_is(TokenType.ELSE):
+            self.__next_token()
+            if not self.__expect_next(TokenType.LBRACE):
+                return None
+            else_block = self.__parse_block_statement()
+
+        if_stm = IfStatement(condition=condition, true_block=true_block, else_block=else_block)
+        return if_stm
+
     def __parse_expression(self, precedence: Precedence):
         prefix_fn: Callable | None = self.prefix_parse_fn.get(self.cur_token.type) 
 
@@ -294,5 +324,8 @@ class Parser():
     
     def __parse_identifier(self):
         return IdentifierLiteral(self.cur_token.literal)
+    
+    def __parse_bool(self):
+        return BoolLiteral(value=self.__cur_token_is(TokenType.TRUE))
 
 

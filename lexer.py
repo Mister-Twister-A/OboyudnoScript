@@ -113,8 +113,35 @@ class Lexer():
                 token = self.__new_token(TokenType.LBRACE, self.cur_char)
             case '}':
                 token = self.__new_token(TokenType.RBRACE, self.cur_char)
+            case '<':
+                if self.__next_char(1) == '=':
+                    ch = self.cur_char
+                    self.__read_char()
+                    token = self.__new_token(TokenType.LESS_EQ, ch + self.cur_char)
+                else:
+                    token = self.__new_token(TokenType.LESS, self.cur_char)
+            case '>':
+                if self.__next_char(1) == '=':
+                    ch = self.cur_char
+                    self.__read_char()
+                    token = self.__new_token(TokenType.GREATER_EQ, ch + self.cur_char)
+                else:
+                    token = self.__new_token(TokenType.GREATER, self.cur_char)
             case '=':
-                token = self.__new_token(TokenType.EQ, self.cur_char)
+                if self.__next_char(1) == '=':
+                    ch = self.cur_char
+                    self.__read_char()
+                    token = self.__new_token(TokenType.DOUBLE_EQ, ch + self.cur_char)
+                else:
+                    token = self.__new_token(TokenType.EQ, self.cur_char)
+            case '!':
+                if self.__next_char(1) == '=':
+                    ch = self.cur_char
+                    self.__read_char()
+                    token = self.__new_token(TokenType.NOT_EQ, ch + self.cur_char)
+                else:
+                    #TODO
+                    token = self.__new_token(TokenType.UNKNOWN, self.cur_char)
             case ';':
                 token = self.__new_token(TokenType.SEPARATOR, self.cur_char) 
             case ':':
