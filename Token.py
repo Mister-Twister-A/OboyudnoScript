@@ -80,7 +80,7 @@ OBOYUDNO_KEYWORDS: dict[str, TokenType] = {
     "oboyudno": TokenType.VAR,
     "🤙": TokenType.COLON,
     "real": TokenType.SEPARATOR,
-    "basil": TokenType.DEF,
+    "basil_seed": TokenType.DEF,
     "fuck_you": TokenType.RETURN,
     "B--D": TokenType.ARROW,
     "ye": TokenType.IF,

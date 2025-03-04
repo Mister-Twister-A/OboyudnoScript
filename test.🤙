@@ -1,14 +1,13 @@
-def main()->int {
-    var a: int= 11;
-    if a == 10 {
-        a = 5;
-    } else {
-        a = 52;
-    }
-    return a; 
+
+basil_seed not_main() -> int52{
+    return 52;
 }
 
-basil main52() B--D float69 {
+def main()->int {
+    return not_main(); 
+}
+
+basil_seed main52() B--D float69 {
     oboyudno b🤙 float69 = 42.6 real
     oboyudno c🤙 int52 = 130;
     ye b == 42.52 {

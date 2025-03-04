@@ -5,7 +5,7 @@ from typing import Callable
 
 from AST import Statement, Expression,Program
 from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement
-from AST import InfixExpression
+from AST import InfixExpression, CallExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
 
 
@@ -35,6 +35,7 @@ PRECEDENCES : dict[TokenType, Precedence] = {
     TokenType.GREATER: Precedence.P_LESSGREATER,
     TokenType.LESS_EQ: Precedence.P_LESSGREATER,
     TokenType.GREATER_EQ: Precedence.P_LESSGREATER,
+    TokenType.LPAREN: Precedence.P_CALL,
 
 }
 
@@ -68,6 +69,7 @@ class Parser():
             TokenType.GREATER: self.__parse_infix_expression,
             TokenType.LESS_EQ: self.__parse_infix_expression,
             TokenType.GREATER_EQ: self.__parse_infix_expression,
+            TokenType.LPAREN: self.__parse_call_expression,
 
         } 
 
@@ -290,6 +292,13 @@ class Parser():
         infix.r_node = self.__parse_expression(precedence)
 
         return infix
+    
+    def __parse_call_expression(self, def_: Expression):
+        call_: CallExpression = CallExpression(def_=def_)
+        call_.args = [] # TODO
+        if not self.__expect_next(TokenType.RPAREN):
+            return None
+        return call_
     
     def __parse_group_expression(self):
         self.__next_token()

@@ -2,7 +2,7 @@ from llvmlite import ir
 
 from AST import Node, NodeType, Statement, Expression, Program
 from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement
-from AST import InfixExpression
+from AST import InfixExpression, CallExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
 
 from Enviroment import Enviroment
@@ -66,6 +66,8 @@ class Compiler():
             #expressions
             case NodeType.INFIX_EXPRESSION:
                 self.__visit_infix_expression(node)
+            case NodeType.CALL_EXPRESSION:
+                self.__visit_call_expression(node)
 
     # region helper funcs
     def __resolve_value(self, node: Expression, value_type: str = None) -> tuple[ir.Value, ir.Type]:
@@ -85,6 +87,8 @@ class Compiler():
             # expressions
             case NodeType.INFIX_EXPRESSION:
                 return self.__visit_infix_expression(node)
+            case NodeType.CALL_EXPRESSION:
+                return self.__visit_call_expression(node)
 
 
 
@@ -184,6 +188,18 @@ class Compiler():
                     type_ = ir.IntType(1)
 
         return value, type_
+    
+    def __visit_call_expression(self, node: CallExpression):
+        name: str = node.def_.value
+        params: list[Expression] = node.args
+        args = []
+        types = []
+        match name:
+            case _:
+                def_, ret_type = self.env.lookup(name)
+                out = self.builder.call(def_, args)
+
+        return out, ret_type
     
     def __visit_var_statement(self, node:VarStatement):
         name: str = node.name.value

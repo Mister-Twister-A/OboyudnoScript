@@ -6,6 +6,29 @@
                 "type": "DEF_STATEMENT",
                 "name": {
                     "type": "INDENTIFIERLITERAL",
+                    "value": "not_main"
+                },
+                "params": [],
+                "ret_type": "int52",
+                "block": {
+                    "type": "BLOCK_STATEMENT",
+                    "statements": [
+                        {
+                            "type": "RETURN_STATEMENT",
+                            "ret_value": {
+                                "type": "INTLITERAL",
+                                "value": 52
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "DEF_STATEMENT": {
+                "type": "DEF_STATEMENT",
+                "name": {
+                    "type": "INDENTIFIERLITERAL",
                     "value": "main"
                 },
                 "params": [],
@@ -14,72 +37,14 @@
                     "type": "BLOCK_STATEMENT",
                     "statements": [
                         {
-                            "type": "VARSTATEMENT",
-                            "name": {
-                                "type": "INDENTIFIERLITERAL",
-                                "value": "a"
-                            },
-                            "value": {
-                                "type": "INTLITERAL",
-                                "value": 10
-                            },
-                            "value_type": "int"
-                        },
-                        {
-                            "type": "EXPRESSIONSTATEMENT",
-                            "json": {
-                                "type": "IF_STATEMENT",
-                                "condition": {
-                                    "type": "INFIXEXPRESSION",
-                                    "left_node": {
-                                        "type": "INDENTIFIERLITERAL",
-                                        "value": "a"
-                                    },
-                                    "operator": "==",
-                                    "r_node": {
-                                        "type": "INTLITERAL",
-                                        "value": 10
-                                    }
-                                },
-                                "true_block": {
-                                    "type": "BLOCK_STATEMENT",
-                                    "statements": [
-                                        {
-                                            "type": "ASSIGNMENT_STATEMENT",
-                                            "identifier": {
-                                                "type": "INDENTIFIERLITERAL",
-                                                "value": "a"
-                                            },
-                                            "new_vlaue": {
-                                                "type": "INTLITERAL",
-                                                "value": 5
-                                            }
-                                        }
-                                    ]
-                                },
-                                "else_block": {
-                                    "type": "BLOCK_STATEMENT",
-                                    "statements": [
-                                        {
-                                            "type": "ASSIGNMENT_STATEMENT",
-                                            "identifier": {
-                                                "type": "INDENTIFIERLITERAL",
-                                                "value": "a"
-                                            },
-                                            "new_vlaue": {
-                                                "type": "INTLITERAL",
-                                                "value": 52
-                                            }
-                                        }
-                                    ]
-                                }
-                            }
-                        },
-                        {
                             "type": "RETURN_STATEMENT",
                             "ret_value": {
-                                "type": "INDENTIFIERLITERAL",
-                                "value": "a"
+                                "type": "CALL_EXPRESSION",
+                                "def": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "not_main"
+                                },
+                                "args": []
                             }
                         }
                     ]
