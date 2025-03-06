@@ -109,6 +109,8 @@ class Lexer():
                 token = self.__new_token(TokenType.LPAREN, self.cur_char)
             case ')':
                 token = self.__new_token(TokenType.RPAREN, self.cur_char)
+            case ',':
+                token = self.__new_token(TokenType.COMMA, self.cur_char)
             case '{':
                 token = self.__new_token(TokenType.LBRACE, self.cur_char)
             case '}':

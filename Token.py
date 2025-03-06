@@ -33,6 +33,7 @@ class TokenType(Enum):
     #symbols
     ARROW = "ARROW"
     COLON = ":"
+    COMMA = ","
     SEPARATOR = ";"
     LPAREN = "LPAREN"
     RPAREN = "RPAREN"

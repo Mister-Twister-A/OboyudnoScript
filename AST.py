@@ -23,6 +23,9 @@ class NodeType(Enum):
     INDENTIFIER_LITERAL = "INDENTIFIERLITERAL"
     BOOL_LITERAL = "BOOL_LITERAL"
 
+    #help
+    DEF_PARAM = "DEF_PARAM"
+
 class Node(ABC):
     @abstractmethod
     def type_(self) -> NodeType:
@@ -52,6 +55,22 @@ class Program(Node):
             "statements": [{stm.type_().value: stm.json()} for stm in self.statements]
         }
 
+# help
+
+class DefParam(Expression):
+    def __init__(self, name: str = None, val_type: str = None):
+        self.name = name
+        self.val_type = val_type
+
+    def type_(self):
+        return NodeType.DEF_PARAM
+    
+    def json(self):
+        return{
+            "type": self.type_().value,
+            "name": self.name,
+            "val_type": self.val_type
+        }
 
 # statements
 
@@ -117,7 +136,7 @@ class ReturnStatement(Statement):
 
 
 class DefStatement(Statement):
-    def __init__(self, name = None, params:list = None, ret_type:str = None, block: BlockStatement = None):
+    def __init__(self, name = None, params:list[DefParam] = None, ret_type:str = None, block: BlockStatement = None):
         self.name = name
         self.params = params
         self.block = block
@@ -127,6 +146,7 @@ class DefStatement(Statement):
         return NodeType.DEF_STATEMENT
     
     def json(self):
+
         return {
             "type": self.type_().value,
             "name": self.name.json(),
@@ -170,6 +190,7 @@ class IfStatement(Statement):
             "else_block": self.else_block.json()
         }
         
+
 
 # expressions
 class InfixExpression(Expression):

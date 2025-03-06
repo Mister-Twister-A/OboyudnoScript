@@ -7,6 +7,7 @@ from AST import Statement, Expression,Program
 from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement
 from AST import InfixExpression, CallExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
+from AST import DefParam
 
 
 
@@ -202,9 +203,7 @@ class Parser():
         if not self.__expect_next(TokenType.LPAREN):
             return None
         
-        def_stm.params = [] # TODO
-        if not self.__expect_next(TokenType.RPAREN):
-            return None
+        def_stm.params = self.__parse_def_params() 
         
         if not self.__expect_next(TokenType.ARROW):
             return None
@@ -220,6 +219,36 @@ class Parser():
         def_stm.block = self.__parse_block_statement()
 
         return def_stm
+    
+    def __parse_def_params(self):
+        params: list[DefParam] = []
+        if self.__next_token_is(TokenType.RPAREN):
+            self.__next_token()
+            return params
+        
+        self.__next_token()
+        first_param = DefParam(name=self.cur_token.literal)
+        if not self.__expect_next(TokenType.COLON):
+            return None
+        self.__next_token()
+        first_param.val_type = self.cur_token.literal
+        params.append(first_param)
+
+        while self.__next_token_is(TokenType.COMMA):
+            self.__next_token()
+            self.__next_token()
+            param: DefParam = DefParam(name=self.cur_token.literal)
+            if not self.__expect_next(TokenType.COLON):
+                return None
+            self.__next_token()
+            
+            param.val_type = self.cur_token.literal
+
+            params.append(param)
+        if not self.__expect_next(TokenType.RPAREN):
+            return None
+        return params
+
 
     def __parse_ret_statement(self):
         stm: ReturnStatement = ReturnStatement()
@@ -295,10 +324,27 @@ class Parser():
     
     def __parse_call_expression(self, def_: Expression):
         call_: CallExpression = CallExpression(def_=def_)
-        call_.args = [] # TODO
-        if not self.__expect_next(TokenType.RPAREN):
-            return None
+        call_.args = self.__parse_expr_list(TokenType.RPAREN)
         return call_
+    
+    def __parse_expr_list(self, end: TokenType):
+        args: list[Expression] = []
+        if self.__next_token_is(end):
+            self.__next_token()
+            return args
+        
+        self.__next_token()
+
+        args.append(self.__parse_expression(Precedence.P_LOWEST))
+        while self.__next_token_is(TokenType.COMMA):
+            self.__next_token()
+            self.__next_token()
+            args.append(self.__parse_expression(Precedence.P_LOWEST))
+
+        if not self.__expect_next(end):
+            return None
+        return args
+        
     
     def __parse_group_expression(self):
         self.__next_token()

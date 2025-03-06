@@ -4,16 +4,27 @@ target datalayout = ""
 
 @"true" = constant i1 1
 @"false" = constant i1 0
-define i32 @"not_main"()
+define i32 @"not_main"(i32 %".1", i32 %".2", i32 %".3")
 {
 not_main_entry:
-  ret i32 52
+  %".5" = alloca i32
+  store i32 %".1", i32* %".5"
+  %".7" = alloca i32
+  store i32 %".2", i32* %".7"
+  %".9" = alloca i32
+  store i32 %".3", i32* %".9"
+  %".11" = load i32, i32* %".5"
+  %".12" = load i32, i32* %".7"
+  %".13" = add i32 %".11", %".12"
+  %".14" = load i32, i32* %".9"
+  %".15" = add i32 %".13", %".14"
+  ret i32 %".15"
 }
 
 define i32 @"main"()
 {
 main_entry:
-  %".2" = call i32 @"not_main"()
+  %".2" = call i32 @"not_main"(i32 52, i32 52, i32 52)
   ret i32 %".2"
 }
 

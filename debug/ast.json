@@ -8,7 +8,18 @@
                     "type": "INDENTIFIERLITERAL",
                     "value": "not_main"
                 },
-                "params": [],
+                "params": [
+                    {
+                        "type": "DEF_PARAM",
+                        "name": "a",
+                        "val_type": "int"
+                    },
+                    {
+                        "type": "DEF_PARAM",
+                        "name": "b",
+                        "val_type": "int52"
+                    }
+                ],
                 "ret_type": "int52",
                 "block": {
                     "type": "BLOCK_STATEMENT",
@@ -16,8 +27,16 @@
                         {
                             "type": "RETURN_STATEMENT",
                             "ret_value": {
-                                "type": "INTLITERAL",
-                                "value": 52
+                                "type": "INFIXEXPRESSION",
+                                "left_node": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "a"
+                                },
+                                "operator": "+",
+                                "r_node": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "b"
+                                }
                             }
                         }
                     ]
@@ -44,7 +63,16 @@
                                     "type": "INDENTIFIERLITERAL",
                                     "value": "not_main"
                                 },
-                                "args": []
+                                "args": [
+                                    {
+                                        "type": "INTLITERAL",
+                                        "value": 1
+                                    },
+                                    {
+                                        "type": "INTLITERAL",
+                                        "value": 52
+                                    }
+                                ]
                             }
                         }
                     ]

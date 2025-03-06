@@ -4,6 +4,7 @@ from AST import Node, NodeType, Statement, Expression, Program
 from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement
 from AST import InfixExpression, CallExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
+from AST import DefParam
 
 from Enviroment import Enviroment
 
@@ -194,6 +195,12 @@ class Compiler():
         params: list[Expression] = node.args
         args = []
         types = []
+
+        if len(params) > 0:
+            for p in params:
+                p_val, p_type = self.__resolve_value(p)
+                args.append(p_val)
+                types.append(p_type)
         match name:
             case _:
                 def_, ret_type = self.env.lookup(name)
@@ -261,9 +268,9 @@ class Compiler():
     def __visit_def_statement(self, node:DefStatement):
         name:str = node.name.value
         block: BlockStatement = node.block
-        params: list[IdentifierLiteral] = node.params
-        param_names: list[str] = [p.value for p in params]
-        param_types: list[ir.Type] = [] # TODO
+        params: list[DefParam] = node.params
+        param_names: list[str] = [p.name for p in params]
+        param_types: list[ir.Type] = [self.type_map[p.val_type] for p in params] 
         ret_type: ir.Type = self.type_map[node.ret_type]
         
         def_type: ir.FunctionType = ir.FunctionType(ret_type, param_types)
@@ -274,8 +281,18 @@ class Compiler():
         prev_env = self.env
 
         self.builder = ir.IRBuilder(ir_block)
+        param_ptr = []
+        for i,t in enumerate(param_types):
+            ptr = self.builder.alloca(t)
+            self.builder.store(def_.args[i], ptr)
+            param_ptr.append(ptr)
 
-        self.env = Enviroment(parent=self.env)
+        self.env = Enviroment(parent=prev_env)   
+
+        for i,arg in enumerate(zip(param_types, param_names)):
+            t = param_types[i]
+            ptr = param_ptr[i]
+            self.env.define(arg[1], ptr, t)
         self.env.define(name, def_, ret_type)
         self.compile(block)
 
