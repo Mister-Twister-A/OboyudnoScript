@@ -2,6 +2,8 @@
 target triple = "x86_64-pc-linux-gnu"
 target datalayout = ""
 
+declare i32 @"printf"(i8* %".1", ...)
+
 @"true" = constant i1 1
 @"false" = constant i1 0
 define i32 @"not_main"(i32 %".1", i32 %".2", i32 %".3")
@@ -24,10 +26,16 @@ not_main_entry:
 define i32 @"main"()
 {
 main_entry:
-  %".2" = call i32 @"not_main"(i32 52, i32 52, i32 52)
-  ret i32 %".2"
+  %".2" = call i32 @"not_main"(i32 2, i32 3, i32 2)
+  %".3" = alloca [20 x i8]*
+  store [20 x i8]* @"__str_1", [20 x i8]** %".3"
+  %".5" = bitcast [20 x i8]* @"__str_1" to i8*
+  %".6" = call i32 (i8*, ...) @"printf"(i8* %".5", i32 %".2")
+  %".7" = call i32 @"not_main"(i32 1, i32 2, i32 3)
+  ret i32 %".7"
 }
 
+@"__str_1" = internal constant [20 x i8] c"num of something %i\00"
 define float @"main52"()
 {
 main52_entry:

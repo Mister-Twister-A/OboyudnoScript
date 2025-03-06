@@ -22,6 +22,7 @@ class NodeType(Enum):
     FLOAT_LITERAL = "FLOATLITERAL"
     INDENTIFIER_LITERAL = "INDENTIFIERLITERAL"
     BOOL_LITERAL = "BOOL_LITERAL"
+    STRING_LITERAL = "STRING_LITERAL"
 
     #help
     DEF_PARAM = "DEF_PARAM"
@@ -283,3 +284,17 @@ class BoolLiteral(Expression):
             "type": self.type_().value,
             "value": self.value
         }
+    
+
+class StringLiteral(Expression):
+    def __init__(self, value: str = None):
+        self.value: str = value
+
+    def type_(self):
+        return NodeType.STRING_LITERAL
+
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "value": self.value
+        }        

@@ -18,6 +18,11 @@
                         "type": "DEF_PARAM",
                         "name": "b",
                         "val_type": "int52"
+                    },
+                    {
+                        "type": "DEF_PARAM",
+                        "name": "c",
+                        "val_type": "int"
                     }
                 ],
                 "ret_type": "int52",
@@ -29,13 +34,21 @@
                             "ret_value": {
                                 "type": "INFIXEXPRESSION",
                                 "left_node": {
-                                    "type": "INDENTIFIERLITERAL",
-                                    "value": "a"
+                                    "type": "INFIXEXPRESSION",
+                                    "left_node": {
+                                        "type": "INDENTIFIERLITERAL",
+                                        "value": "a"
+                                    },
+                                    "operator": "+",
+                                    "r_node": {
+                                        "type": "INDENTIFIERLITERAL",
+                                        "value": "b"
+                                    }
                                 },
                                 "operator": "+",
                                 "r_node": {
                                     "type": "INDENTIFIERLITERAL",
-                                    "value": "b"
+                                    "value": "c"
                                 }
                             }
                         }
@@ -56,6 +69,43 @@
                     "type": "BLOCK_STATEMENT",
                     "statements": [
                         {
+                            "type": "EXPRESSIONSTATEMENT",
+                            "json": {
+                                "type": "CALL_EXPRESSION",
+                                "def": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "print"
+                                },
+                                "args": [
+                                    {
+                                        "type": "STRING_LITERAL",
+                                        "value": "num of something %i"
+                                    },
+                                    {
+                                        "type": "CALL_EXPRESSION",
+                                        "def": {
+                                            "type": "INDENTIFIERLITERAL",
+                                            "value": "not_main"
+                                        },
+                                        "args": [
+                                            {
+                                                "type": "INTLITERAL",
+                                                "value": 3
+                                            },
+                                            {
+                                                "type": "INTLITERAL",
+                                                "value": 2
+                                            },
+                                            {
+                                                "type": "INTLITERAL",
+                                                "value": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             "type": "RETURN_STATEMENT",
                             "ret_value": {
                                 "type": "CALL_EXPRESSION",
@@ -70,7 +120,11 @@
                                     },
                                     {
                                         "type": "INTLITERAL",
-                                        "value": 52
+                                        "value": 2
+                                    },
+                                    {
+                                        "type": "INTLITERAL",
+                                        "value": 3
                                     }
                                 ]
                             }

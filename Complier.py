@@ -15,16 +15,27 @@ class Compiler():
             "float": ir.FloatType(),
             "int52": ir.IntType(32), # TODO make int 64
             "float69": ir.FloatType(),
-            "bool": ir.IntType(1)
+            "bool": ir.IntType(1),
+            "void": ir.VoidType(),
+            "str": ir.PointerType(ir.IntType(8))
         }
 
         self.module: ir.Module = ir.Module("main")
         self.builder: ir.IRBuilder = ir.IRBuilder()
         self.env: Enviroment = Enviroment()
         self.errors: list[str] = []
+        self.counter = 0
         self.__initialize_builtins()
+
+    def __increment_counter(self):
+        self.counter += 1
+        return self.counter
     
     def __initialize_builtins(self):
+        def __initialize_print():
+            def_type = ir.FunctionType(self.type_map["int"], [ir.IntType(8).as_pointer()], var_arg=True)
+            return ir.Function(self.module, def_type, 'printf')
+
         def __initialize_bools():
             bool_type: ir.Type = self.type_map["bool"]
 
@@ -38,9 +49,37 @@ class Compiler():
 
             return true_var, false_var
         
+        self.env.define("print", __initialize_print(), ir.IntType(32))
+        
         true_var, false_var = __initialize_bools()
         self.env.define("true", true_var, true_var.type)
         self.env.define("false", false_var, false_var.type)
+
+    def __convert_str(self, string:str):
+        string = string.replace("\\n", "\n\0")
+        f_string = f"{string}\0"
+        c_string = ir.Constant(ir.ArrayType(ir.IntType(8), len(f_string)), bytearray(f_string.encode("utf8")))
+
+        global_str = ir.GlobalVariable(self.module, c_string.type, name=f"__str_{self.__increment_counter()}")
+        global_str.global_constant = True
+        global_str.initializer = c_string
+        global_str.linkage = "internal"
+        return global_str, global_str.type
+
+    def __builtin_print(self, params: list[ir.Instruction], ret_type: ir.Type):
+        def_,_ = self.env.lookup("print")
+        c_string = self.builder.alloca(ret_type)
+        self.builder.store(params[0], c_string)
+        rest_params = params[1:]
+        if isinstance(params[0], ir.LoadInstr):
+            c_fmt: ir.LoadInstr = params[0]
+            ptr = c_fmt.operands[0]
+            str_val = self.builder.load(ptr)
+            fmt_arg = self.builder.bitcast(str_val, ir.IntType(8).as_pointer())
+            return self.builder.call(def_, [fmt_arg, *rest_params])
+        else:
+            fmt_arg = self.builder.bitcast(self.module.get_global(f"__str_{self.counter}"), ir.IntType(8).as_pointer())
+            return self.builder.call(def_,[fmt_arg, *rest_params])
 
 
     def compile(self, node: Node):
@@ -84,6 +123,9 @@ class Compiler():
                 return self.builder.load(ptr), type_
             case NodeType.BOOL_LITERAL:
                 return ir.Constant(ir.IntType(1), 1 if node.value else 0), ir.IntType(1)
+            case NodeType.STRING_LITERAL:
+                string, type_ = self.__convert_str(node.value)
+                return string, type_
             
             # expressions
             case NodeType.INFIX_EXPRESSION:
@@ -202,6 +244,9 @@ class Compiler():
                 args.append(p_val)
                 types.append(p_type)
         match name:
+            case "print":
+                out = self.__builtin_print(params=args, ret_type=types[0])
+                ret_type = self.type_map["int"]
             case _:
                 def_, ret_type = self.env.lookup(name)
                 out = self.builder.call(def_, args)

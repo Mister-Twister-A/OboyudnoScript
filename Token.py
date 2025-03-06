@@ -10,6 +10,7 @@ class TokenType(Enum):
     IDENTIFIER = "IDENTIFIER"
     INT = "INT"
     FLOAT = "FLOAT"
+    STRING = "STRING"
 
     #arithmetic
     PLUS = "PLUS"
@@ -89,7 +90,7 @@ OBOYUDNO_KEYWORDS: dict[str, TokenType] = {
 
 }
 
-TYPE_KEYWORDS: list[str] = ["int", "float", "int52", "float69"]
+TYPE_KEYWORDS: list[str] = ["int", "float", "int52", "float69", "str", "void"]
 
 def lookup_ident(ident: str):
     type_: TokenType | None = KEYWORDS.get(ident)

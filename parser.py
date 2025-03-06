@@ -6,7 +6,7 @@ from typing import Callable
 from AST import Statement, Expression,Program
 from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement
 from AST import InfixExpression, CallExpression
-from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
+from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral, StringLiteral
 from AST import DefParam
 
 
@@ -56,6 +56,7 @@ class Parser():
             TokenType.IF: self.__parse_if_statement,
             TokenType.TRUE: self.__parse_bool,
             TokenType.FALSE: self.__parse_bool,
+            TokenType.STRING: self.__parse_string_literal,
         } 
         self.infix_parse_fn: dict[TokenType, Callable] = {
             TokenType.PLUS: self.__parse_infix_expression,
@@ -376,6 +377,9 @@ class Parser():
             return None
         
         return float_node
+    
+    def __parse_string_literal(self):
+        return StringLiteral(value=self.cur_token.literal)
     
     def __parse_identifier(self):
         return IdentifierLiteral(self.cur_token.literal)

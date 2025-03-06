@@ -1,10 +1,12 @@
 
 basil_seed not_main(a: int, b: int52, c: int) -> int52{
-    return a + b + c;
+    fuck_you a + b + c;
 }
 
 def main()->int {
-    return not_main(52, 52, 52); 
+
+    print("num of something %i", not_main(2,3,2));
+    return not_main(1,2,3); 
 }
 
 basil_seed main52() B--D float69 {

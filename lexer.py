@@ -79,6 +79,14 @@ class Lexer():
         while self.cur_char is not None and (self.__is_letter(self.cur_char) or self.cur_char.isalnum()):
             self.__read_char()
         return self.source[position:self.position]
+    
+    def __read_str(self):
+        position = self.position + 1
+        while True:
+            self.__read_char()
+            if self.cur_char == '"' or self.cur_char is None:
+                break
+        return self.source[position:self.position]
 
 
     def next_token(self):
@@ -148,6 +156,8 @@ class Lexer():
                 token = self.__new_token(TokenType.SEPARATOR, self.cur_char) 
             case ':':
                 token = self.__new_token(TokenType.COLON, self.cur_char) 
+            case '"':
+                token = self.__new_token(TokenType.STRING, self.__read_str())
             case '🤙':
                 token = self.__new_token(TokenType.COLON, self.cur_char) 
             case None:
