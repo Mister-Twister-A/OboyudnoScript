@@ -1,7 +1,7 @@
 from llvmlite import ir
 
 from AST import Node, NodeType, Statement, Expression, Program
-from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement
+from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement, WhileStatement
 from AST import InfixExpression, CallExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
 from AST import DefParam
@@ -101,6 +101,8 @@ class Compiler():
                 self.__visit_ass_statement(node)
             case NodeType.IF_STATEMENT:
                 self.__visit_if_statement(node)
+            case NodeType.WHILE_STATEMENT:
+                self.__visit_while_statement(node)
 
             
             #expressions
@@ -231,6 +233,21 @@ class Compiler():
                     type_ = ir.IntType(1)
 
         return value, type_
+    
+    def __visit_while_statement(self, node):
+        condition: Expression = node.condition
+        block: BlockStatement = node.block
+        test, _ = self.__resolve_value(condition)
+
+        while_entr = self.builder.append_basic_block(f"while_entry_{self.__increment_counter()}")
+        while_other = self.builder.append_basic_block(f"while_otherwise_{self.counter}")
+
+        self.builder.cbranch(test, while_entr, while_other)
+        self.builder.position_at_start(while_entr)
+        self.compile(block)
+        test,_ = self.__resolve_value(condition)
+        self.builder.cbranch(test, while_entr, while_other)
+        self.builder.position_at_start(while_other)
     
     def __visit_call_expression(self, node: CallExpression):
         name: str = node.def_.value

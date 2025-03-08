@@ -6,36 +6,42 @@ declare i32 @"printf"(i8* %".1", ...)
 
 @"true" = constant i1 1
 @"false" = constant i1 0
-define i32 @"not_main"(i32 %".1", i32 %".2", i32 %".3")
+define i32 @"not_main"(i32 %".1")
 {
 not_main_entry:
-  %".5" = alloca i32
-  store i32 %".1", i32* %".5"
-  %".7" = alloca i32
-  store i32 %".2", i32* %".7"
-  %".9" = alloca i32
-  store i32 %".3", i32* %".9"
-  %".11" = load i32, i32* %".5"
-  %".12" = load i32, i32* %".7"
-  %".13" = add i32 %".11", %".12"
-  %".14" = load i32, i32* %".9"
-  %".15" = add i32 %".13", %".14"
-  ret i32 %".15"
+  %".3" = alloca i32
+  store i32 %".1", i32* %".3"
+  %".5" = load i32, i32* %".3"
+  %".6" = add i32 %".5", 1
+  ret i32 %".6"
 }
 
 define i32 @"main"()
 {
 main_entry:
-  %".2" = call i32 @"not_main"(i32 2, i32 3, i32 2)
-  %".3" = alloca [20 x i8]*
-  store [20 x i8]* @"__str_1", [20 x i8]** %".3"
-  %".5" = bitcast [20 x i8]* @"__str_1" to i8*
-  %".6" = call i32 (i8*, ...) @"printf"(i8* %".5", i32 %".2")
-  %".7" = call i32 @"not_main"(i32 1, i32 2, i32 3)
-  ret i32 %".7"
+  %".2" = alloca i32
+  store i32 0, i32* %".2"
+  %".4" = load i32, i32* %".2"
+  %".5" = icmp slt i32 %".4", 52
+  br i1 %".5", label %"while_entry_1", label %"while_otherwise_1"
+while_entry_1:
+  %".7" = load i32, i32* %".2"
+  %".8" = alloca [9 x i8]*
+  store [9 x i8]* @"__str_2", [9 x i8]** %".8"
+  %".10" = bitcast [9 x i8]* @"__str_2" to i8*
+  %".11" = call i32 (i8*, ...) @"printf"(i8* %".10", i32 %".7")
+  %".12" = load i32, i32* %".2"
+  %".13" = call i32 @"not_main"(i32 %".12")
+  store i32 %".13", i32* %".2"
+  %".15" = load i32, i32* %".2"
+  %".16" = icmp slt i32 %".15", 52
+  br i1 %".16", label %"while_entry_1", label %"while_otherwise_1"
+while_otherwise_1:
+  %".18" = load i32, i32* %".2"
+  ret i32 %".18"
 }
 
-@"__str_1" = internal constant [20 x i8] c"num of something %i\00"
+@"__str_2" = internal constant [9 x i8] c"a = %i\0a\00\00"
 define float @"main52"()
 {
 main52_entry:
@@ -53,6 +59,17 @@ main52_entry.else:
   store i32 143, i32* %".4"
   br label %"main52_entry.endif"
 main52_entry.endif:
-  %".13" = load float, float* %".2"
-  ret float %".13"
+  %".13" = load i32, i32* %".4"
+  %".14" = icmp slt i32 %".13", 252
+  br i1 %".14", label %"while_entry_3", label %"while_otherwise_3"
+while_entry_3:
+  %".16" = load i32, i32* %".4"
+  %".17" = add i32 %".16", 52
+  store i32 %".17", i32* %".4"
+  %".19" = load i32, i32* %".4"
+  %".20" = icmp slt i32 %".19", 252
+  br i1 %".20", label %"while_entry_3", label %"while_otherwise_3"
+while_otherwise_3:
+  %".22" = load float, float* %".2"
+  ret float %".22"
 }

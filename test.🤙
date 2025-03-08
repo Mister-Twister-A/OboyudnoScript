@@ -1,12 +1,15 @@
 
-basil_seed not_main(a: int, b: int52, c: int) -> int52{
-    fuck_you a + b + c;
+basil_seed not_main(a: int) -> int52{
+    fuck_you a + 1;
 }
 
 def main()->int {
-
-    print("num of something %i", not_main(2,3,2));
-    return not_main(1,2,3); 
+    var a: int = 0;
+    while a < 52 {
+        print("a = %i\n", a);
+        a = not_main(a);
+    }
+    return a; 
 }
 
 basil_seed main52() B--D float69 {
@@ -17,6 +20,9 @@ basil_seed main52() B--D float69 {
     } 
     elsagate {
         c = 143 real
+    }
+    poka c < 252 {
+        c = c + 52 real
     }
     fuck_you b real
 }

@@ -4,7 +4,7 @@ from enum import Enum, auto
 from typing import Callable
 
 from AST import Statement, Expression,Program
-from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement
+from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement, WhileStatement
 from AST import InfixExpression, CallExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral, StringLiteral
 from AST import DefParam
@@ -140,8 +140,23 @@ class Parser():
                 return self.__parse_def_statement()
             case TokenType.RETURN:
                 return self.__parse_ret_statement()
+            case TokenType.WHILE:
+                return self.__parse_while_statement()
             case _:
                 return self.__parse_statement_expression()
+            
+    def __parse_while_statement(self):
+        condition: Expression = None
+        block: BlockStatement = None
+        self.__next_token()
+        condition = self.__parse_expression(Precedence.P_LOWEST)
+
+        if not self.__expect_next(TokenType.LBRACE):
+            return None
+        block = self.__parse_block_statement()
+        while_stm = WhileStatement(condition=condition, block=block)
+        return while_stm
+
     
     def __parse_statement_expression(self):
         expr = self.__parse_expression(Precedence.P_LOWEST)

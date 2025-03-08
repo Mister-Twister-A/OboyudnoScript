@@ -49,6 +49,7 @@ class TokenType(Enum):
     ELSE = "ELSE"
     TRUE = "TRUE"
     FALSE = "FALSE"
+    WHILE = "WHILE"
 
     # type
     TYPE = "TYPE"
@@ -74,7 +75,8 @@ KEYWORDS: dict[str, TokenType] = {
     "if": TokenType.IF,
     "else": TokenType.ELSE,
     "true": TokenType.TRUE,
-    "false": TokenType.FALSE
+    "false": TokenType.FALSE,
+    "while": TokenType.WHILE
 
 }
 
@@ -86,7 +88,8 @@ OBOYUDNO_KEYWORDS: dict[str, TokenType] = {
     "fuck_you": TokenType.RETURN,
     "B--D": TokenType.ARROW,
     "ye": TokenType.IF,
-    "elsagate": TokenType.ELSE
+    "elsagate": TokenType.ELSE,
+    "poka": TokenType.WHILE
 
 }
 
