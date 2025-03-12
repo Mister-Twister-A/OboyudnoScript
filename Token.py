@@ -50,6 +50,9 @@ class TokenType(Enum):
     TRUE = "TRUE"
     FALSE = "FALSE"
     WHILE = "WHILE"
+    FOR = "FOR"
+    BREAK = "BREAK"
+    CONTINUE = "CONTINUE"
 
     # type
     TYPE = "TYPE"
@@ -76,7 +79,10 @@ KEYWORDS: dict[str, TokenType] = {
     "else": TokenType.ELSE,
     "true": TokenType.TRUE,
     "false": TokenType.FALSE,
-    "while": TokenType.WHILE
+    "while": TokenType.WHILE,
+    "for": TokenType.FOR,
+    "break": TokenType.BREAK,
+    "continue": TokenType.CONTINUE
 
 }
 
@@ -89,7 +95,10 @@ OBOYUDNO_KEYWORDS: dict[str, TokenType] = {
     "B--D": TokenType.ARROW,
     "ye": TokenType.IF,
     "elsagate": TokenType.ELSE,
-    "poka": TokenType.WHILE
+    "poka": TokenType.WHILE,
+    "dlya": TokenType.FOR,
+    "fucking_die": TokenType.BREAK,
+    "long_live_the_king": TokenType.CONTINUE
 
 }
 

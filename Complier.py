@@ -1,7 +1,7 @@
 from llvmlite import ir
 
 from AST import Node, NodeType, Statement, Expression, Program
-from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement, WhileStatement
+from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement, WhileStatement, ForStatement, BreakStatement, ContinueStatement
 from AST import InfixExpression, CallExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
 from AST import DefParam
@@ -26,6 +26,9 @@ class Compiler():
         self.errors: list[str] = []
         self.counter = 0
         self.__initialize_builtins()
+
+        self.breaks: list[ir.Block] = []
+        self.continues: list[ir.Block] = []
 
     def __increment_counter(self):
         self.counter += 1
@@ -103,6 +106,12 @@ class Compiler():
                 self.__visit_if_statement(node)
             case NodeType.WHILE_STATEMENT:
                 self.__visit_while_statement(node)
+            case NodeType.FOR_STATEMENT:
+                self.__visit_for_statement(node)
+            case NodeType.BREAK_STATEMENT:
+                self.__visit_break_statement(node)
+            case NodeType.CONTINUE_STATEMENT:
+                self.__visit_continue_statement(node)
 
             
             #expressions
@@ -233,6 +242,39 @@ class Compiler():
                     type_ = ir.IntType(1)
 
         return value, type_
+    
+    def __visit_break_statement(self, node):
+        self.builder.branch(self.breaks[-1])
+
+    def __visit_continue_statement(self, node):
+        self.builder.branch(self.continues[-1])
+
+    def __visit_for_statement(self, node:ForStatement):
+        var_decl: VarStatement = node.var_decl
+        condition: Expression = node.condition
+        op: AssignmentStatement = node.op
+        block: BlockStatement = node.block
+
+        prev_env = self.env
+        self.evn = Enviroment(parent=prev_env)
+        self.compile(var_decl)
+
+        for_entr = self.builder.append_basic_block(f"for_entr_{self.__increment_counter()}")
+        for_other = self.builder.append_basic_block(f"for_other_{self.__increment_counter()}")
+        self.breaks.append(for_other)
+        self.continues.append(for_entr)
+
+        self.builder.branch(for_entr)
+        self.builder.position_at_start(for_entr)
+        self.compile(block)
+        self.compile(op)
+        test,_ = self.__resolve_value(condition)
+        self.builder.cbranch(test, for_entr, for_other)
+        self.builder.position_at_start(for_other)
+        self.breaks.pop()
+        self.continues.pop()
+
+
     
     def __visit_while_statement(self, node):
         condition: Expression = node.condition

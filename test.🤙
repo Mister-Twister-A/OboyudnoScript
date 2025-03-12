@@ -5,10 +5,16 @@ basil_seed not_main(a: int) -> int52{
 
 def main()->int {
     var a: int = 0;
-    while a < 52 {
-        print("a = %i\n", a);
-        a = not_main(a);
+    for(var i:int = 0; i < 10; i = not_main(i)){
+
+        if i == 52{
+            fucking_die;
+        }
+
+        print("current i %i\n", i);
+        a = a + 1;
     }
+
     return a; 
 }
 

@@ -21,27 +21,36 @@ define i32 @"main"()
 main_entry:
   %".2" = alloca i32
   store i32 0, i32* %".2"
-  %".4" = load i32, i32* %".2"
-  %".5" = icmp slt i32 %".4", 52
-  br i1 %".5", label %"while_entry_1", label %"while_otherwise_1"
-while_entry_1:
-  %".7" = load i32, i32* %".2"
-  %".8" = alloca [9 x i8]*
-  store [9 x i8]* @"__str_2", [9 x i8]** %".8"
-  %".10" = bitcast [9 x i8]* @"__str_2" to i8*
-  %".11" = call i32 (i8*, ...) @"printf"(i8* %".10", i32 %".7")
-  %".12" = load i32, i32* %".2"
-  %".13" = call i32 @"not_main"(i32 %".12")
-  store i32 %".13", i32* %".2"
-  %".15" = load i32, i32* %".2"
-  %".16" = icmp slt i32 %".15", 52
-  br i1 %".16", label %"while_entry_1", label %"while_otherwise_1"
-while_otherwise_1:
-  %".18" = load i32, i32* %".2"
-  ret i32 %".18"
+  %".4" = alloca i32
+  store i32 0, i32* %".4"
+  br label %"for_entr_1"
+for_entr_1:
+  %".7" = load i32, i32* %".4"
+  %".8" = icmp eq i32 %".7", 52
+  br i1 %".8", label %"for_entr_1.if", label %"for_entr_1.endif"
+for_other_2:
+  %".25" = load i32, i32* %".2"
+  ret i32 %".25"
+for_entr_1.if:
+  br label %"for_other_2"
+for_entr_1.endif:
+  %".11" = load i32, i32* %".4"
+  %".12" = alloca [15 x i8]*
+  store [15 x i8]* @"__str_3", [15 x i8]** %".12"
+  %".14" = bitcast [15 x i8]* @"__str_3" to i8*
+  %".15" = call i32 (i8*, ...) @"printf"(i8* %".14", i32 %".11")
+  %".16" = load i32, i32* %".2"
+  %".17" = add i32 %".16", 1
+  store i32 %".17", i32* %".2"
+  %".19" = load i32, i32* %".4"
+  %".20" = call i32 @"not_main"(i32 %".19")
+  store i32 %".20", i32* %".4"
+  %".22" = load i32, i32* %".4"
+  %".23" = icmp slt i32 %".22", 10
+  br i1 %".23", label %"for_entr_1", label %"for_other_2"
 }
 
-@"__str_2" = internal constant [9 x i8] c"a = %i\0a\00\00"
+@"__str_3" = internal constant [15 x i8] c"current i %i\0a\00\00"
 define float @"main52"()
 {
 main52_entry:
@@ -61,15 +70,15 @@ main52_entry.else:
 main52_entry.endif:
   %".13" = load i32, i32* %".4"
   %".14" = icmp slt i32 %".13", 252
-  br i1 %".14", label %"while_entry_3", label %"while_otherwise_3"
-while_entry_3:
+  br i1 %".14", label %"while_entry_4", label %"while_otherwise_4"
+while_entry_4:
   %".16" = load i32, i32* %".4"
   %".17" = add i32 %".16", 52
   store i32 %".17", i32* %".4"
   %".19" = load i32, i32* %".4"
   %".20" = icmp slt i32 %".19", 252
-  br i1 %".20", label %"while_entry_3", label %"while_otherwise_3"
-while_otherwise_3:
+  br i1 %".20", label %"while_entry_4", label %"while_otherwise_4"
+while_otherwise_4:
   %".22" = load float, float* %".2"
   ret float %".22"
 }

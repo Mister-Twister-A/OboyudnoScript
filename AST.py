@@ -13,6 +13,9 @@ class NodeType(Enum):
     ASSIGNMENT_STATEMENT = "ASSIGNMENT_STATEMENT"
     IF_STATEMENT = "IF_STATEMENT"
     WHILE_STATEMENT = "WHILE_STATEMENT"
+    FOR_STATEMENT = "FOR_STATEMENT"
+    BREAK_STATEMENT = "BREAK_STATEMENT"
+    CONTINUE_STATEMENT = "CONTINUE_STATEMENT"
 
     # expressions
     INFIX_EXPRESSION = "INFIXEXPRESSION"
@@ -209,6 +212,46 @@ class WhileStatement(Statement):
         }
         
         
+class BreakStatement(Statement):
+
+    def type_(self):
+        return NodeType.BREAK_STATEMENT
+    
+    def json(self):
+        return {
+            "type": self.type_().value
+        }
+    
+
+class ContinueStatement(Statement):
+
+    def type_(self):
+        return NodeType.CONTINUE_STATEMENT
+    
+    def json(self):
+        return {
+            "type": self.type_().value
+        }
+    
+
+class ForStatement(Statement):
+    def __init__(self, var_declaration: VarStatement = None, condition: Expression = None, op:AssignmentStatement = None, block: BlockStatement= None):
+        self.var_decl = var_declaration
+        self.condition = condition
+        self.op = op
+        self.block = block
+
+    def type_(self):
+        return NodeType.FOR_STATEMENT
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "var_decl": self.var_decl.json(),
+            "condition": self.condition.json(),
+            "operation": self.op.json(),
+            "block": self.block.json()
+        }
 
 
 # expressions

@@ -4,7 +4,7 @@ from enum import Enum, auto
 from typing import Callable
 
 from AST import Statement, Expression,Program
-from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement, WhileStatement
+from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement, WhileStatement, BreakStatement, ForStatement, ContinueStatement
 from AST import InfixExpression, CallExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral, StringLiteral
 from AST import DefParam
@@ -142,8 +142,40 @@ class Parser():
                 return self.__parse_ret_statement()
             case TokenType.WHILE:
                 return self.__parse_while_statement()
+            case TokenType.FOR:
+                return self.__parse_for_statement()
+            case TokenType.BREAK:
+                return self.__parse_break_statement()
+            case TokenType.CONTINUE:
+                return self.__parse_continue_statement()
             case _:
                 return self.__parse_statement_expression()
+            
+    def __parse_break_statement(self):
+        self.__next_token()
+        return BreakStatement()
+    
+    def __parse_continue_statement(self):
+        self.__next_token()
+        return ContinueStatement()
+    
+    def __parse_for_statement(self):
+        for_stm: ForStatement = ForStatement()
+        if not self.__expect_next(TokenType.LPAREN):
+            return None
+        if not self.__expect_next(TokenType.VAR):
+            return None
+        for_stm.var_decl = self.__parse_var_statement()
+        self.__next_token()
+        for_stm.condition = self.__parse_expression(Precedence.P_LOWEST)
+        if not self.__expect_next(TokenType.SEPARATOR):
+            return None
+        self.__next_token()
+        for_stm.op = self.__parse_assignment_statement()
+        if not self.__expect_next(TokenType.LBRACE):
+            return None
+        for_stm.block = self.__parse_block_statement()
+        return for_stm
             
     def __parse_while_statement(self):
         condition: Expression = None
