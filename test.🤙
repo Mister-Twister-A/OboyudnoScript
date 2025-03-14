@@ -3,21 +3,6 @@ basil_seed not_main(a: int) -> int52{
     fuck_you a + 1;
 }
 
-def main()->int {
-    var a: int = 0;
-    for(var i:int = 0; i < 10; i = not_main(i)){
-
-        if i == 52{
-            fucking_die;
-        }
-
-        print("current i %i\n", i);
-        a = a + 1;
-    }
-
-    return a; 
-}
-
 basil_seed main52() B--D float69 {
     oboyudno b🤙 float69 = 42.6 real
     oboyudno c🤙 int52 = 130;
@@ -30,7 +15,35 @@ basil_seed main52() B--D float69 {
     poka c < 252 {
         c = c + 52 real
     }
+
+    dlya( oboyudno i🤙 int52 = 0; i < 10; i = i + 1 ){
+        if i == 6 {
+            fucking_die real
+        }
+        b = b + 0.1 real
+    }
     fuck_you b real
 }
 
+def main()->int {
+    var a: int = 1;
+    var x: float69 = main52();
+    print("%.2f %i \n", 3.5, 3);
+
+    for (var i:int = -5; i > -10; i -= 1) {
+
+        if i == 52{
+            fucking_die;
+        }
+
+        if (!false){
+            print("what ta heil ");
+        }
+
+        print("current i %i\n", i);
+        a *= 2;
+    }
+
+    return a; 
+}
 

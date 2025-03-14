@@ -15,7 +15,7 @@ from Complier import Compiler
 file_path = sys.argv[1]
 
 LEXER_DEBUG = False
-PARSER_DEBUG = False
+PARSER_DEBUG = True
 COMPILER_DEBUG = True
 RUN_CODE = True
 if __name__ == "__main__":

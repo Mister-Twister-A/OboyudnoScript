@@ -13,16 +13,6 @@
                         "type": "DEF_PARAM",
                         "name": "a",
                         "val_type": "int"
-                    },
-                    {
-                        "type": "DEF_PARAM",
-                        "name": "b",
-                        "val_type": "int52"
-                    },
-                    {
-                        "type": "DEF_PARAM",
-                        "name": "c",
-                        "val_type": "int"
                     }
                 ],
                 "ret_type": "int52",
@@ -34,99 +24,14 @@
                             "ret_value": {
                                 "type": "INFIXEXPRESSION",
                                 "left_node": {
-                                    "type": "INFIXEXPRESSION",
-                                    "left_node": {
-                                        "type": "INDENTIFIERLITERAL",
-                                        "value": "a"
-                                    },
-                                    "operator": "+",
-                                    "r_node": {
-                                        "type": "INDENTIFIERLITERAL",
-                                        "value": "b"
-                                    }
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "a"
                                 },
                                 "operator": "+",
                                 "r_node": {
-                                    "type": "INDENTIFIERLITERAL",
-                                    "value": "c"
+                                    "type": "INTLITERAL",
+                                    "value": 1
                                 }
-                            }
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "DEF_STATEMENT": {
-                "type": "DEF_STATEMENT",
-                "name": {
-                    "type": "INDENTIFIERLITERAL",
-                    "value": "main"
-                },
-                "params": [],
-                "ret_type": "int",
-                "block": {
-                    "type": "BLOCK_STATEMENT",
-                    "statements": [
-                        {
-                            "type": "EXPRESSIONSTATEMENT",
-                            "json": {
-                                "type": "CALL_EXPRESSION",
-                                "def": {
-                                    "type": "INDENTIFIERLITERAL",
-                                    "value": "print"
-                                },
-                                "args": [
-                                    {
-                                        "type": "STRING_LITERAL",
-                                        "value": "num of something %i"
-                                    },
-                                    {
-                                        "type": "CALL_EXPRESSION",
-                                        "def": {
-                                            "type": "INDENTIFIERLITERAL",
-                                            "value": "not_main"
-                                        },
-                                        "args": [
-                                            {
-                                                "type": "INTLITERAL",
-                                                "value": 3
-                                            },
-                                            {
-                                                "type": "INTLITERAL",
-                                                "value": 2
-                                            },
-                                            {
-                                                "type": "INTLITERAL",
-                                                "value": 1
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "type": "RETURN_STATEMENT",
-                            "ret_value": {
-                                "type": "CALL_EXPRESSION",
-                                "def": {
-                                    "type": "INDENTIFIERLITERAL",
-                                    "value": "not_main"
-                                },
-                                "args": [
-                                    {
-                                        "type": "INTLITERAL",
-                                        "value": 1
-                                    },
-                                    {
-                                        "type": "INTLITERAL",
-                                        "value": 2
-                                    },
-                                    {
-                                        "type": "INTLITERAL",
-                                        "value": 3
-                                    }
-                                ]
                             }
                         }
                     ]
@@ -220,10 +125,366 @@
                             }
                         },
                         {
+                            "type": "WHILE_STATEMENT",
+                            "condition": {
+                                "type": "INFIXEXPRESSION",
+                                "left_node": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "c"
+                                },
+                                "operator": "<",
+                                "r_node": {
+                                    "type": "INTLITERAL",
+                                    "value": 252
+                                }
+                            },
+                            "block": {
+                                "type": "BLOCK_STATEMENT",
+                                "statements": [
+                                    {
+                                        "type": "ASSIGNMENT_STATEMENT",
+                                        "identifier": {
+                                            "type": "INDENTIFIERLITERAL",
+                                            "value": "c"
+                                        },
+                                        "new_vlaue": {
+                                            "type": "INFIXEXPRESSION",
+                                            "left_node": {
+                                                "type": "INDENTIFIERLITERAL",
+                                                "value": "c"
+                                            },
+                                            "operator": "+",
+                                            "r_node": {
+                                                "type": "INTLITERAL",
+                                                "value": 52
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "FOR_STATEMENT",
+                            "var_decl": {
+                                "type": "VARSTATEMENT",
+                                "name": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "i"
+                                },
+                                "value": {
+                                    "type": "INTLITERAL",
+                                    "value": 0
+                                },
+                                "value_type": "int52"
+                            },
+                            "condition": {
+                                "type": "INFIXEXPRESSION",
+                                "left_node": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "i"
+                                },
+                                "operator": "<",
+                                "r_node": {
+                                    "type": "INTLITERAL",
+                                    "value": 10
+                                }
+                            },
+                            "operation": {
+                                "type": "ASSIGNMENT_STATEMENT",
+                                "identifier": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "i"
+                                },
+                                "new_vlaue": {
+                                    "type": "INFIXEXPRESSION",
+                                    "left_node": {
+                                        "type": "INDENTIFIERLITERAL",
+                                        "value": "i"
+                                    },
+                                    "operator": "+",
+                                    "r_node": {
+                                        "type": "INTLITERAL",
+                                        "value": 1
+                                    }
+                                }
+                            },
+                            "block": {
+                                "type": "BLOCK_STATEMENT",
+                                "statements": [
+                                    {
+                                        "type": "EXPRESSIONSTATEMENT",
+                                        "json": {
+                                            "type": "IF_STATEMENT",
+                                            "condition": {
+                                                "type": "INFIXEXPRESSION",
+                                                "left_node": {
+                                                    "type": "INDENTIFIERLITERAL",
+                                                    "value": "i"
+                                                },
+                                                "operator": "==",
+                                                "r_node": {
+                                                    "type": "INTLITERAL",
+                                                    "value": 6
+                                                }
+                                            },
+                                            "true_block": {
+                                                "type": "BLOCK_STATEMENT",
+                                                "statements": [
+                                                    {
+                                                        "type": "BREAK_STATEMENT"
+                                                    }
+                                                ]
+                                            },
+                                            "else_block": ""
+                                        }
+                                    },
+                                    {
+                                        "type": "ASSIGNMENT_STATEMENT",
+                                        "identifier": {
+                                            "type": "INDENTIFIERLITERAL",
+                                            "value": "b"
+                                        },
+                                        "new_vlaue": {
+                                            "type": "INFIXEXPRESSION",
+                                            "left_node": {
+                                                "type": "INDENTIFIERLITERAL",
+                                                "value": "b"
+                                            },
+                                            "operator": "+",
+                                            "r_node": {
+                                                "type": "FLOATLITERAL",
+                                                "value": 0.1
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             "type": "RETURN_STATEMENT",
                             "ret_value": {
                                 "type": "INDENTIFIERLITERAL",
                                 "value": "b"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "DEF_STATEMENT": {
+                "type": "DEF_STATEMENT",
+                "name": {
+                    "type": "INDENTIFIERLITERAL",
+                    "value": "main"
+                },
+                "params": [],
+                "ret_type": "int",
+                "block": {
+                    "type": "BLOCK_STATEMENT",
+                    "statements": [
+                        {
+                            "type": "VARSTATEMENT",
+                            "name": {
+                                "type": "INDENTIFIERLITERAL",
+                                "value": "a"
+                            },
+                            "value": {
+                                "type": "INTLITERAL",
+                                "value": 1
+                            },
+                            "value_type": "int"
+                        },
+                        {
+                            "type": "VARSTATEMENT",
+                            "name": {
+                                "type": "INDENTIFIERLITERAL",
+                                "value": "x"
+                            },
+                            "value": {
+                                "type": "CALL_EXPRESSION",
+                                "def": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "main52"
+                                },
+                                "args": []
+                            },
+                            "value_type": "float69"
+                        },
+                        {
+                            "type": "EXPRESSIONSTATEMENT",
+                            "json": {
+                                "type": "CALL_EXPRESSION",
+                                "def": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "print"
+                                },
+                                "args": [
+                                    {
+                                        "type": "STRING_LITERAL",
+                                        "value": "%.2f %i \\n"
+                                    },
+                                    {
+                                        "type": "FLOATLITERAL",
+                                        "value": 3.5
+                                    },
+                                    {
+                                        "type": "INTLITERAL",
+                                        "value": 3
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "FOR_STATEMENT",
+                            "var_decl": {
+                                "type": "VARSTATEMENT",
+                                "name": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "i"
+                                },
+                                "value": {
+                                    "type": "PREFIX_EXPRESSION",
+                                    "operation": "-",
+                                    "r_node": {
+                                        "type": "INTLITERAL",
+                                        "value": 5
+                                    }
+                                },
+                                "value_type": "int"
+                            },
+                            "condition": {
+                                "type": "INFIXEXPRESSION",
+                                "left_node": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "i"
+                                },
+                                "operator": ">",
+                                "r_node": {
+                                    "type": "PREFIX_EXPRESSION",
+                                    "operation": "-",
+                                    "r_node": {
+                                        "type": "INTLITERAL",
+                                        "value": 10
+                                    }
+                                }
+                            },
+                            "operation": {
+                                "type": "ASSIGNMENT_STATEMENT",
+                                "identifier": {
+                                    "type": "INDENTIFIERLITERAL",
+                                    "value": "i"
+                                },
+                                "new_vlaue": {
+                                    "type": "INTLITERAL",
+                                    "value": 1
+                                }
+                            },
+                            "block": {
+                                "type": "BLOCK_STATEMENT",
+                                "statements": [
+                                    {
+                                        "type": "EXPRESSIONSTATEMENT",
+                                        "json": {
+                                            "type": "IF_STATEMENT",
+                                            "condition": {
+                                                "type": "INFIXEXPRESSION",
+                                                "left_node": {
+                                                    "type": "INDENTIFIERLITERAL",
+                                                    "value": "i"
+                                                },
+                                                "operator": "==",
+                                                "r_node": {
+                                                    "type": "INTLITERAL",
+                                                    "value": 52
+                                                }
+                                            },
+                                            "true_block": {
+                                                "type": "BLOCK_STATEMENT",
+                                                "statements": [
+                                                    {
+                                                        "type": "BREAK_STATEMENT"
+                                                    }
+                                                ]
+                                            },
+                                            "else_block": ""
+                                        }
+                                    },
+                                    {
+                                        "type": "EXPRESSIONSTATEMENT",
+                                        "json": {
+                                            "type": "IF_STATEMENT",
+                                            "condition": {
+                                                "type": "PREFIX_EXPRESSION",
+                                                "operation": "!",
+                                                "r_node": {
+                                                    "type": "BOOL_LITERAL",
+                                                    "value": false
+                                                }
+                                            },
+                                            "true_block": {
+                                                "type": "BLOCK_STATEMENT",
+                                                "statements": [
+                                                    {
+                                                        "type": "EXPRESSIONSTATEMENT",
+                                                        "json": {
+                                                            "type": "CALL_EXPRESSION",
+                                                            "def": {
+                                                                "type": "INDENTIFIERLITERAL",
+                                                                "value": "print"
+                                                            },
+                                                            "args": [
+                                                                {
+                                                                    "type": "STRING_LITERAL",
+                                                                    "value": "what ta heil "
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "else_block": ""
+                                        }
+                                    },
+                                    {
+                                        "type": "EXPRESSIONSTATEMENT",
+                                        "json": {
+                                            "type": "CALL_EXPRESSION",
+                                            "def": {
+                                                "type": "INDENTIFIERLITERAL",
+                                                "value": "print"
+                                            },
+                                            "args": [
+                                                {
+                                                    "type": "STRING_LITERAL",
+                                                    "value": "current i %i\\n"
+                                                },
+                                                {
+                                                    "type": "INDENTIFIERLITERAL",
+                                                    "value": "i"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "ASSIGNMENT_STATEMENT",
+                                        "identifier": {
+                                            "type": "INDENTIFIERLITERAL",
+                                            "value": "a"
+                                        },
+                                        "new_vlaue": {
+                                            "type": "INTLITERAL",
+                                            "value": 2
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "RETURN_STATEMENT",
+                            "ret_value": {
+                                "type": "INDENTIFIERLITERAL",
+                                "value": "a"
                             }
                         }
                     ]

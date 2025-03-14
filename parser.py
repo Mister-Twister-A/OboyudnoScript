@@ -5,7 +5,7 @@ from typing import Callable
 
 from AST import Statement, Expression,Program
 from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement, WhileStatement, BreakStatement, ForStatement, ContinueStatement
-from AST import InfixExpression, CallExpression
+from AST import InfixExpression, CallExpression, PrefixExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral, StringLiteral
 from AST import DefParam
 
@@ -57,6 +57,9 @@ class Parser():
             TokenType.TRUE: self.__parse_bool,
             TokenType.FALSE: self.__parse_bool,
             TokenType.STRING: self.__parse_string_literal,
+            TokenType.MINUS: self.__parse_prefix_expression,
+            TokenType.NOT: self.__parse_prefix_expression,
+
         } 
         self.infix_parse_fn: dict[TokenType, Callable] = {
             TokenType.PLUS: self.__parse_infix_expression,
@@ -109,6 +112,10 @@ class Parser():
         else:
             self.__expect_error(type_)
             return False
+        
+    def __next_toke_is_assign(self):
+        ass_ops: list[TokenType] = [TokenType.EQ, TokenType.PLUS_EQ, TokenType.MUL_EQ, TokenType.MINUS_EQ, TokenType.DIV_EQ]
+        return self.next_token.type in ass_ops
     
     def __expect_error(self, type_: TokenType):
         self.errors.append(f"expected the next fucking token to be fucking {type_} but got fucking {self.next_token.type} instead")
@@ -130,7 +137,7 @@ class Parser():
         return program
     
     def __parse_statement(self):
-        if self.__cur_token_is(TokenType.IDENTIFIER) and self.__next_token_is(TokenType.EQ):
+        if self.__cur_token_is(TokenType.IDENTIFIER) and self.__next_toke_is_assign():
             return self.__parse_assignment_statement()
 
         match self.cur_token.type:
@@ -230,6 +237,7 @@ class Parser():
         # x = 5 + 5
         stm.iden = IdentifierLiteral(self.cur_token.literal)
         self.__next_token()
+        stm.op = self.cur_token.literal
         self.__next_token()
         stm.new_value = self.__parse_expression(Precedence.P_LOWEST)
 
@@ -402,6 +410,12 @@ class Parser():
             return None
         
         return expr
+    
+    def __parse_prefix_expression(self):
+        pref: PrefixExpression = PrefixExpression(op = self.cur_token.literal)
+        self.__next_token()
+        pref.r_node = self.__parse_expression(Precedence.P_PREFIX)
+        return pref
     
     def __parse_int_literal(self):
         int_node: IntLiteral = IntLiteral()

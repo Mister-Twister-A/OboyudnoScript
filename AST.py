@@ -20,6 +20,7 @@ class NodeType(Enum):
     # expressions
     INFIX_EXPRESSION = "INFIXEXPRESSION"
     CALL_EXPRESSION = "CALL_EXPRESSION"
+    PREFIX_EXPRESSION = "PREFIX_EXPRESSION"
 
     #literal
     INT_LITERAL = "INTLITERAL"
@@ -162,9 +163,10 @@ class DefStatement(Statement):
     
 
 class AssignmentStatement(Statement):
-    def __init__(self, iden: Expression = None, new_value: Expression = None):
+    def __init__(self, iden: Expression = None, new_value: Expression = None, op:str = ""):
         self.iden = iden
         self.new_value = new_value
+        self.op = ""
 
     def type_(self):
         return NodeType.ASSIGNMENT_STATEMENT
@@ -192,7 +194,7 @@ class IfStatement(Statement):
             "type": self.type_().value,
             "condition": self.condition.json(),
             "true_block": self.true_block.json(),
-            "else_block": self.else_block.json()
+            "else_block": self.else_block.json() if self.else_block is not None else ""
         }
     
 
@@ -287,6 +289,22 @@ class CallExpression(Expression):
             "type": self.type_().value,
             "def": self.def_.json(),
             "args": [arg.json() for arg in self.args]
+        }
+    
+
+class PrefixExpression(Expression):
+    def __init__(self, op: str = None, r_node: Expression = None):
+        self.op = op
+        self.r_node = r_node
+
+    def type_(self):
+        return NodeType.PREFIX_EXPRESSION
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "operation": self.op,
+            "r_node": self.r_node.json()
         }
 
         

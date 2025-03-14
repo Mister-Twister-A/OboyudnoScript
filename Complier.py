@@ -2,7 +2,7 @@ from llvmlite import ir
 
 from AST import Node, NodeType, Statement, Expression, Program
 from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement, WhileStatement, ForStatement, BreakStatement, ContinueStatement
-from AST import InfixExpression, CallExpression
+from AST import InfixExpression, CallExpression, PrefixExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
 from AST import DefParam
 
@@ -143,6 +143,8 @@ class Compiler():
                 return self.__visit_infix_expression(node)
             case NodeType.CALL_EXPRESSION:
                 return self.__visit_call_expression(node)
+            case NodeType.PREFIX_EXPRESSION:
+                return self.__visit_prefix_epxression(node)
 
 
 
@@ -262,7 +264,7 @@ class Compiler():
         for_entr = self.builder.append_basic_block(f"for_entr_{self.__increment_counter()}")
         for_other = self.builder.append_basic_block(f"for_other_{self.__increment_counter()}")
         self.breaks.append(for_other)
-        self.continues.append(for_entr)
+        self.continues.append(for_entr) # not working TODO
 
         self.builder.branch(for_entr)
         self.builder.position_at_start(for_entr)
@@ -312,6 +314,29 @@ class Compiler():
 
         return out, ret_type
     
+    def __visit_prefix_epxression(self, node: PrefixExpression):
+        op: str = node.op
+        r_node:Expression = node.r_node
+        r_val, r_type = self.__resolve_value(r_node)
+
+        Type = None
+        Value = None
+        if isinstance(r_type, ir.FloatType):
+            Type = ir.FloatType()
+            match op:
+                case "-":
+                    Value = self.builder.fmul(r_val, ir.Constant(ir.FloatType(), -1.0))
+                case "!":
+                    Value = ir.Constant(ir.IntType(1), 0)
+        elif isinstance(r_type, ir.IntType):
+            Type = ir.IntType(32)
+            match op:
+                case "-":
+                    Value = self.builder.mul(r_val, ir.Constant(ir.IntType(32), -1))
+                case "!":
+                    Value = self.builder.not_(r_val)
+        return Value, Type
+    
     def __visit_var_statement(self, node:VarStatement):
         name: str = node.name.value
         value: Expression = node.value
@@ -339,14 +364,53 @@ class Compiler():
     
     def __visit_ass_statement(self, node: AssignmentStatement): # asssingment bro
         name:str = node.iden.value
+        op:str = node.op
         new_value: Expression = node.new_value
 
-        value, type_ = self.__resolve_value(new_value)
+        
         if self.env.lookup(name) is None:
             self.errors.append(f"bro you forgot to declare {name} before re-ASSinging it")
-        else: 
-            ptr, _ = self.env.lookup(name)
-            self.builder.store(value, ptr)
+            return
+        new_value, type_ = self.__resolve_value(new_value)
+        val_ptr, _ = self.env.lookup(name)
+        orig_val = self.builder.load(val_ptr)
+
+        if isinstance(orig_val, ir.IntType) and isinstance(new_value, ir.FloatType):
+            orig_val = self.builder.sitofp(orig_val, ir.FloatType)
+
+        if isinstance(orig_val, ir.FloatType) and isinstance(new_value, ir.IntType):
+            new_value = self.builder.sitofp(new_value, ir.FloatType)
+
+        value = None
+        Type = None
+        match op:
+            case "=":
+                value = new_value
+            case "+=":
+                if isinstance(orig_val.type, ir.IntType) and isinstance(new_value.type, ir.IntType):
+                    value = self.builder.add(orig_val, new_value)
+                else:
+                    value = self.builder.fadd(orig_val, new_value)
+            case "-=":
+                if isinstance(orig_val.type, ir.IntType) and isinstance(new_value.type, ir.IntType):
+                    value = self.builder.sub(orig_val, new_value)
+                else:
+                    value = self.builder.fsub(orig_val, new_value)
+            case "*=":
+                if isinstance(orig_val.type, ir.IntType) and isinstance(new_value.type, ir.IntType):
+                    value = self.builder.mul(orig_val, new_value)
+                else:
+                    value = self.builder.fmul(orig_val, new_value)
+            case "/=":
+                if isinstance(orig_val.type, ir.IntType) and isinstance(new_value.type, ir.IntType):
+                    value = self.builder.sdiv(orig_val, new_value)
+                else:
+                    value = self.builder.fdiv(orig_val, new_value)
+            case _:
+                print("this ass operator is NOT supported")
+
+        ptr,_ = self.env.lookup(name)
+        self.builder.store(value, ptr)
 
     def __visit_if_statement(self, node: IfStatement):
         condition = node.condition

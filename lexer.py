@@ -96,19 +96,38 @@ class Lexer():
 
         match self.cur_char:
             case '+':
-                token = self.__new_token(TokenType.PLUS, self.cur_char)
+                if self.__next_char(1) == "=":
+                    ch = self.cur_char
+                    self.__read_char()
+                    token = self.__new_token(TokenType.PLUS_EQ, ch + self.cur_char)
+                else:
+                    token = self.__new_token(TokenType.PLUS, self.cur_char)
             case '-':
                 if self.__next_char(1) == '>':
                     ch = self.cur_char
                     self.__read_char()
                     token = self.__new_token(TokenType.ARROW, ch + self.cur_char)
+                elif self.__next_char(1) == "=":
+                    ch = self.cur_char
+                    self.__read_char()
+                    token = self.__new_token(TokenType.MINUS_EQ, ch + self.cur_char)
                 else: 
                     token = self.__new_token(TokenType.MINUS, self.cur_char)
                 
             case '*':
-                token = self.__new_token(TokenType.MULTIPLY, self.cur_char)
+                if self.__next_char(1) == "=":
+                    ch = self.cur_char
+                    self.__read_char()
+                    token = self.__new_token(TokenType.MUL_EQ, ch + self.cur_char)
+                else:
+                    token = self.__new_token(TokenType.MULTIPLY, self.cur_char)
             case '/':
-                token = self.__new_token(TokenType.DIVIDE, self.cur_char)
+                if self.__next_char(1) == "=":
+                    ch = self.cur_char
+                    self.__read_char()
+                    token = self.__new_token(TokenType.DIV_EQ, ch + self.cur_char)
+                else:
+                    token = self.__new_token(TokenType.DIVIDE, self.cur_char)
             case '^':
                 token = self.__new_token(TokenType.POW, self.cur_char)
             case '%':
@@ -150,8 +169,7 @@ class Lexer():
                     self.__read_char()
                     token = self.__new_token(TokenType.NOT_EQ, ch + self.cur_char)
                 else:
-                    #TODO
-                    token = self.__new_token(TokenType.UNKNOWN, self.cur_char)
+                    token = self.__new_token(TokenType.NOT, self.cur_char)
             case ';':
                 token = self.__new_token(TokenType.SEPARATOR, self.cur_char) 
             case ':':
