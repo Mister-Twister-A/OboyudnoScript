@@ -4,7 +4,7 @@ from enum import Enum, auto
 from typing import Callable
 
 from AST import Statement, Expression,Program
-from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement, WhileStatement, BreakStatement, ForStatement, ContinueStatement
+from AST import ExpressionStatement, VarStatement, DefStatement, BlockStatement, ReturnStatement, AssignmentStatement, IfStatement, WhileStatement, BreakStatement, ForStatement, ContinueStatement, ImportStatement
 from AST import InfixExpression, CallExpression, PrefixExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral, StringLiteral
 from AST import DefParam
@@ -155,8 +155,20 @@ class Parser():
                 return self.__parse_break_statement()
             case TokenType.CONTINUE:
                 return self.__parse_continue_statement()
+            case TokenType.IMPORT:
+                return self.__parse_import_statement()
             case _:
                 return self.__parse_statement_expression()
+            
+    def __parse_import_statement(self):
+        stm: ImportStatement = ImportStatement()
+        if not self.__expect_next(TokenType.STRING):
+            return None
+        stm.file_path = self.cur_token.literal
+
+        if not self.__expect_next(TokenType.SEPARATOR):
+            return None
+        return stm
             
     def __parse_break_statement(self):
         self.__next_token()

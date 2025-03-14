@@ -6,6 +6,19 @@ declare i32 @"printf"(i8* %".1", ...)
 
 @"true" = constant i1 1
 @"false" = constant i1 0
+define i32 @"add"(i32 %".1", i32 %".2")
+{
+add_entry:
+  %".4" = alloca i32
+  store i32 %".1", i32* %".4"
+  %".6" = alloca i32
+  store i32 %".2", i32* %".6"
+  %".8" = load i32, i32* %".4"
+  %".9" = load i32, i32* %".6"
+  %".10" = add i32 %".8", %".9"
+  ret i32 %".10"
+}
+
 define i32 @"not_main"(i32 %".1")
 {
 not_main_entry:
@@ -94,8 +107,8 @@ for_entr_5:
   %".16" = icmp eq i32 %".15", 52
   br i1 %".16", label %"for_entr_5.if", label %"for_entr_5.endif"
 for_other_6:
-  %".41" = load i32, i32* %".2"
-  ret i32 %".41"
+  %".42" = load i32, i32* %".2"
+  ret i32 %".42"
 for_entr_5.if:
   br label %"for_other_6"
 for_entr_5.endif:
@@ -114,15 +127,16 @@ for_entr_5.endif.endif:
   %".29" = bitcast [15 x i8]* @"__str_8" to i8*
   %".30" = call i32 (i8*, ...) @"printf"(i8* %".29", i32 %".26")
   %".31" = load i32, i32* %".2"
-  %".32" = mul i32 %".31", 2
+  %".32" = call i32 @"add"(i32 %".31", i32 1)
+  %".33" = load i32, i32* %".2"
   store i32 %".32", i32* %".2"
-  %".34" = load i32, i32* %".12"
-  %".35" = sub i32 %".34", 1
-  store i32 %".35", i32* %".12"
-  %".37" = load i32, i32* %".12"
-  %".38" = mul i32 10, -1
-  %".39" = icmp sgt i32 %".37", %".38"
-  br i1 %".39", label %"for_entr_5", label %"for_other_6"
+  %".35" = load i32, i32* %".12"
+  %".36" = sub i32 %".35", 1
+  store i32 %".36", i32* %".12"
+  %".38" = load i32, i32* %".12"
+  %".39" = mul i32 10, -1
+  %".40" = icmp sgt i32 %".38", %".39"
+  br i1 %".40", label %"for_entr_5", label %"for_other_6"
 }
 
 @"__str_4" = internal constant [11 x i8] c"%.2f %i \0a\00\00"

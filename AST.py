@@ -16,6 +16,7 @@ class NodeType(Enum):
     FOR_STATEMENT = "FOR_STATEMENT"
     BREAK_STATEMENT = "BREAK_STATEMENT"
     CONTINUE_STATEMENT = "CONTINUE_STATEMENT"
+    IMPORT_STATEMENT = "IMPORT_STATEMENT"
 
     # expressions
     INFIX_EXPRESSION = "INFIXEXPRESSION"
@@ -254,6 +255,22 @@ class ForStatement(Statement):
             "operation": self.op.json(),
             "block": self.block.json()
         }
+    
+
+class ImportStatement(Statement):
+    def __init__(self, file_path:str = ""):
+        self.file_path = file_path
+
+    def type_(self):
+        return NodeType.IMPORT_STATEMENT
+    
+    def json(self):
+        return {
+            "type": self.type_().value,
+            "file_path": self.file_path
+
+        }
+        
 
 
 # expressions

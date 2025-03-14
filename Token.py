@@ -58,6 +58,7 @@ class TokenType(Enum):
     FOR = "FOR"
     BREAK = "BREAK"
     CONTINUE = "CONTINUE"
+    IMPORT = "IMPORT"
 
     # type
     TYPE = "TYPE"
@@ -87,7 +88,8 @@ KEYWORDS: dict[str, TokenType] = {
     "while": TokenType.WHILE,
     "for": TokenType.FOR,
     "break": TokenType.BREAK,
-    "continue": TokenType.CONTINUE
+    "continue": TokenType.CONTINUE,
+    "import": TokenType.IMPORT,
 
 }
 
@@ -103,7 +105,8 @@ OBOYUDNO_KEYWORDS: dict[str, TokenType] = {
     "poka": TokenType.WHILE,
     "dlya": TokenType.FOR,
     "fucking_die": TokenType.BREAK,
-    "long_live_the_king": TokenType.CONTINUE
+    "long_live_the_king": TokenType.CONTINUE,
+    "get_over_here": TokenType.IMPORT,
 
 }
 

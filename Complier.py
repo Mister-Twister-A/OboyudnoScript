@@ -1,12 +1,16 @@
 from llvmlite import ir
 
 from AST import Node, NodeType, Statement, Expression, Program
-from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement, WhileStatement, ForStatement, BreakStatement, ContinueStatement
+from AST import ExpressionStatement, VarStatement, ReturnStatement, BlockStatement, DefStatement, AssignmentStatement, IfStatement, WhileStatement, ForStatement, BreakStatement, ContinueStatement, ImportStatement
 from AST import InfixExpression, CallExpression, PrefixExpression
 from AST import IntLiteral, FloatLiteral, IdentifierLiteral, BoolLiteral
 from AST import DefParam
 
 from Enviroment import Enviroment
+import os
+
+from lexer import Lexer
+from parser import Parser
 
 class Compiler():
     def __init__(self):
@@ -29,6 +33,7 @@ class Compiler():
 
         self.breaks: list[ir.Block] = []
         self.continues: list[ir.Block] = []
+        self.global_imports: dict[str, Program] = {}
 
     def __increment_counter(self):
         self.counter += 1
@@ -112,8 +117,9 @@ class Compiler():
                 self.__visit_break_statement(node)
             case NodeType.CONTINUE_STATEMENT:
                 self.__visit_continue_statement(node)
+            case NodeType.IMPORT_STATEMENT:
+                self.__visit_import_statement(node)
 
-            
             #expressions
             case NodeType.INFIX_EXPRESSION:
                 self.__visit_infix_expression(node)
@@ -251,6 +257,25 @@ class Compiler():
     def __visit_continue_statement(self, node):
         self.builder.branch(self.continues[-1])
 
+    def __visit_import_statement(self, node: ImportStatement):
+        file_path:str = node.file_path
+        if self.global_imports.get(file_path) is not None:
+            print(f"file {file_path} is alredy fucking imported like bro actually can you just look at the code \n you ever tried thinking yk like actually this is insane \n you need to change like bro this is not okay")
+            return
+        with open(os.path.abspath(f"./{file_path}"), "r") as f:
+            imp_code = f.read()
+        l:Lexer = Lexer(source=imp_code)
+        p:Parser = Parser(lexer=l)
+        program:Program = p.parse_program()
+        if len(p.errors) > 0:
+            print(f"that fucking {file_path} is so ASS")
+            for e in p.errors:
+                print(e)
+            exit()
+
+        self.compile(node=program)
+        self.global_imports[file_path] = program
+    
     def __visit_for_statement(self, node:ForStatement):
         var_decl: VarStatement = node.var_decl
         condition: Expression = node.condition

@@ -2,6 +2,12 @@
     "type": "PROGRAM",
     "statements": [
         {
+            "IMPORT_STATEMENT": {
+                "type": "IMPORT_STATEMENT",
+                "file_path": "imp.\ud83e\udd19"
+            }
+        },
+        {
             "DEF_STATEMENT": {
                 "type": "DEF_STATEMENT",
                 "name": {
@@ -473,8 +479,21 @@
                                             "value": "a"
                                         },
                                         "new_vlaue": {
-                                            "type": "INTLITERAL",
-                                            "value": 2
+                                            "type": "CALL_EXPRESSION",
+                                            "def": {
+                                                "type": "INDENTIFIERLITERAL",
+                                                "value": "add"
+                                            },
+                                            "args": [
+                                                {
+                                                    "type": "INDENTIFIERLITERAL",
+                                                    "value": "a"
+                                                },
+                                                {
+                                                    "type": "INTLITERAL",
+                                                    "value": 1
+                                                }
+                                            ]
                                         }
                                     }
                                 ]
