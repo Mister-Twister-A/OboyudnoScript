@@ -421,6 +421,100 @@
                                         "json": {
                                             "type": "IF_STATEMENT",
                                             "condition": {
+                                                "type": "INFIXEXPRESSION",
+                                                "left_node": {
+                                                    "type": "INDENTIFIERLITERAL",
+                                                    "value": "i"
+                                                },
+                                                "operator": "==",
+                                                "r_node": {
+                                                    "type": "PREFIX_EXPRESSION",
+                                                    "operation": "-",
+                                                    "r_node": {
+                                                        "type": "INTLITERAL",
+                                                        "value": 6
+                                                    }
+                                                }
+                                            },
+                                            "true_block": {
+                                                "type": "BLOCK_STATEMENT",
+                                                "statements": [
+                                                    {
+                                                        "type": "EXPRESSIONSTATEMENT",
+                                                        "json": {
+                                                            "type": "CALL_EXPRESSION",
+                                                            "def": {
+                                                                "type": "INDENTIFIERLITERAL",
+                                                                "value": "print"
+                                                            },
+                                                            "args": [
+                                                                {
+                                                                    "type": "STRING_LITERAL",
+                                                                    "value": "continued \\n"
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "CONTINUE_STATEMENT"
+                                                    }
+                                                ]
+                                            },
+                                            "else_block": ""
+                                        }
+                                    },
+                                    {
+                                        "type": "EXPRESSIONSTATEMENT",
+                                        "json": {
+                                            "type": "IF_STATEMENT",
+                                            "condition": {
+                                                "type": "INFIXEXPRESSION",
+                                                "left_node": {
+                                                    "type": "INDENTIFIERLITERAL",
+                                                    "value": "i"
+                                                },
+                                                "operator": "==",
+                                                "r_node": {
+                                                    "type": "PREFIX_EXPRESSION",
+                                                    "operation": "-",
+                                                    "r_node": {
+                                                        "type": "INTLITERAL",
+                                                        "value": 7
+                                                    }
+                                                }
+                                            },
+                                            "true_block": {
+                                                "type": "BLOCK_STATEMENT",
+                                                "statements": [
+                                                    {
+                                                        "type": "EXPRESSIONSTATEMENT",
+                                                        "json": {
+                                                            "type": "CALL_EXPRESSION",
+                                                            "def": {
+                                                                "type": "INDENTIFIERLITERAL",
+                                                                "value": "print"
+                                                            },
+                                                            "args": [
+                                                                {
+                                                                    "type": "STRING_LITERAL",
+                                                                    "value": "continued 2 \\n"
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "CONTINUE_STATEMENT"
+                                                    }
+                                                ]
+                                            },
+                                            "else_block": ""
+                                        }
+                                    },
+                                    {
+                                        "type": "EXPRESSIONSTATEMENT",
+                                        "json": {
+                                            "type": "IF_STATEMENT",
+                                            "condition": {
                                                 "type": "PREFIX_EXPRESSION",
                                                 "operation": "!",
                                                 "r_node": {

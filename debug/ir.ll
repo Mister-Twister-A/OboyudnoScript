@@ -107,38 +107,74 @@ for_entr_5:
   %".16" = icmp eq i32 %".15", 52
   br i1 %".16", label %"for_entr_5.if", label %"for_entr_5.endif"
 for_other_6:
-  %".42" = load i32, i32* %".2"
-  ret i32 %".42"
+  %".72" = load i32, i32* %".2"
+  ret i32 %".72"
 for_entr_5.if:
   br label %"for_other_6"
 for_entr_5.endif:
-  %".19" = xor i1 0, -1
-  br i1 %".19", label %"for_entr_5.endif.if", label %"for_entr_5.endif.endif"
+  %".19" = load i32, i32* %".12"
+  %".20" = mul i32 6, -1
+  %".21" = icmp eq i32 %".19", %".20"
+  br i1 %".21", label %"for_entr_5.endif.if", label %"for_entr_5.endif.endif"
 for_entr_5.endif.if:
-  %".21" = alloca [14 x i8]*
-  store [14 x i8]* @"__str_7", [14 x i8]** %".21"
-  %".23" = bitcast [14 x i8]* @"__str_7" to i8*
-  %".24" = call i32 (i8*, ...) @"printf"(i8* %".23")
-  br label %"for_entr_5.endif.endif"
+  %".23" = alloca [13 x i8]*
+  store [13 x i8]* @"__str_7", [13 x i8]** %".23"
+  %".25" = bitcast [13 x i8]* @"__str_7" to i8*
+  %".26" = call i32 (i8*, ...) @"printf"(i8* %".25")
+  %".27" = load i32, i32* %".12"
+  %".28" = mul i32 10, -1
+  %".29" = icmp sgt i32 %".27", %".28"
+  %".30" = load i32, i32* %".12"
+  %".31" = sub i32 %".30", 1
+  store i32 %".31", i32* %".12"
+  br i1 %".29", label %"for_entr_5", label %"for_other_6"
 for_entr_5.endif.endif:
-  %".26" = load i32, i32* %".12"
-  %".27" = alloca [15 x i8]*
-  store [15 x i8]* @"__str_8", [15 x i8]** %".27"
-  %".29" = bitcast [15 x i8]* @"__str_8" to i8*
-  %".30" = call i32 (i8*, ...) @"printf"(i8* %".29", i32 %".26")
-  %".31" = load i32, i32* %".2"
-  %".32" = call i32 @"add"(i32 %".31", i32 1)
-  %".33" = load i32, i32* %".2"
-  store i32 %".32", i32* %".2"
-  %".35" = load i32, i32* %".12"
-  %".36" = sub i32 %".35", 1
-  store i32 %".36", i32* %".12"
-  %".38" = load i32, i32* %".12"
-  %".39" = mul i32 10, -1
-  %".40" = icmp sgt i32 %".38", %".39"
-  br i1 %".40", label %"for_entr_5", label %"for_other_6"
+  %".34" = load i32, i32* %".12"
+  %".35" = mul i32 7, -1
+  %".36" = icmp eq i32 %".34", %".35"
+  br i1 %".36", label %"for_entr_5.endif.endif.if", label %"for_entr_5.endif.endif.endif"
+for_entr_5.endif.endif.if:
+  %".38" = alloca [15 x i8]*
+  store [15 x i8]* @"__str_8", [15 x i8]** %".38"
+  %".40" = bitcast [15 x i8]* @"__str_8" to i8*
+  %".41" = call i32 (i8*, ...) @"printf"(i8* %".40")
+  %".42" = load i32, i32* %".12"
+  %".43" = mul i32 10, -1
+  %".44" = icmp sgt i32 %".42", %".43"
+  %".45" = load i32, i32* %".12"
+  %".46" = sub i32 %".45", 1
+  store i32 %".46", i32* %".12"
+  br i1 %".44", label %"for_entr_5", label %"for_other_6"
+for_entr_5.endif.endif.endif:
+  %".49" = xor i1 0, -1
+  br i1 %".49", label %"for_entr_5.endif.endif.endif.if", label %"for_entr_5.endif.endif.endif.endif"
+for_entr_5.endif.endif.endif.if:
+  %".51" = alloca [14 x i8]*
+  store [14 x i8]* @"__str_9", [14 x i8]** %".51"
+  %".53" = bitcast [14 x i8]* @"__str_9" to i8*
+  %".54" = call i32 (i8*, ...) @"printf"(i8* %".53")
+  br label %"for_entr_5.endif.endif.endif.endif"
+for_entr_5.endif.endif.endif.endif:
+  %".56" = load i32, i32* %".12"
+  %".57" = alloca [15 x i8]*
+  store [15 x i8]* @"__str_10", [15 x i8]** %".57"
+  %".59" = bitcast [15 x i8]* @"__str_10" to i8*
+  %".60" = call i32 (i8*, ...) @"printf"(i8* %".59", i32 %".56")
+  %".61" = load i32, i32* %".2"
+  %".62" = call i32 @"add"(i32 %".61", i32 1)
+  %".63" = load i32, i32* %".2"
+  store i32 %".62", i32* %".2"
+  %".65" = load i32, i32* %".12"
+  %".66" = sub i32 %".65", 1
+  store i32 %".66", i32* %".12"
+  %".68" = load i32, i32* %".12"
+  %".69" = mul i32 10, -1
+  %".70" = icmp sgt i32 %".68", %".69"
+  br i1 %".70", label %"for_entr_5", label %"for_other_6"
 }
 
 @"__str_4" = internal constant [11 x i8] c"%.2f %i \0a\00\00"
-@"__str_7" = internal constant [14 x i8] c"what ta heil \00"
-@"__str_8" = internal constant [15 x i8] c"current i %i\0a\00\00"
+@"__str_7" = internal constant [13 x i8] c"continued \0a\00\00"
+@"__str_8" = internal constant [15 x i8] c"continued 2 \0a\00\00"
+@"__str_9" = internal constant [14 x i8] c"what ta heil \00"
+@"__str_10" = internal constant [15 x i8] c"current i %i\0a\00\00"

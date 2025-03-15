@@ -37,6 +37,15 @@ def main()->int {
         if i == 52{
             fucking_die;
         }
+        if i == -6 {
+            print("continued \n");
+            continue;
+        }
+        if i == -7{
+            print("continued 2 \n");
+            continue;
+        }
+
 
         if (!false){
             print("what ta heil ");

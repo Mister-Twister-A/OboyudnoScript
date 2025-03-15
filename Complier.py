@@ -33,6 +33,8 @@ class Compiler():
 
         self.breaks: list[ir.Block] = []
         self.continues: list[ir.Block] = []
+        self.conditions = []
+        self.ops = []
         self.global_imports: dict[str, Program] = {}
 
     def __increment_counter(self):
@@ -255,7 +257,9 @@ class Compiler():
         self.builder.branch(self.breaks[-1])
 
     def __visit_continue_statement(self, node):
-        self.builder.branch(self.continues[-1])
+        test,_ = self.__resolve_value(self.conditions[-1])
+        self.compile(self.ops[-1])
+        self.builder.cbranch(test, self.continues[-1], self.breaks[-1])
 
     def __visit_import_statement(self, node: ImportStatement):
         file_path:str = node.file_path
@@ -290,6 +294,8 @@ class Compiler():
         for_other = self.builder.append_basic_block(f"for_other_{self.__increment_counter()}")
         self.breaks.append(for_other)
         self.continues.append(for_entr) # not working TODO
+        self.conditions.append(condition)
+        self.ops.append(op)
 
         self.builder.branch(for_entr)
         self.builder.position_at_start(for_entr)
@@ -300,6 +306,8 @@ class Compiler():
         self.builder.position_at_start(for_other)
         self.breaks.pop()
         self.continues.pop()
+        self.conditions.pop()
+        self.ops.pop()
 
 
     
