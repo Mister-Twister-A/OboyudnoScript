@@ -95,6 +95,7 @@ KEYWORDS: dict[str, TokenType] = {
 
 OBOYUDNO_KEYWORDS: dict[str, TokenType] = {
     "oboyudno": TokenType.VAR,
+    "los_tungtungtungtungritas": TokenType.VAR,
     "🤙": TokenType.COLON,
     "real": TokenType.SEPARATOR,
     "basil_seed": TokenType.DEF,
